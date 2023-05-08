@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
 
 const path = require("path");
 const connectDB = require("./configs/database");
@@ -8,6 +9,10 @@ const {errorHandler} = require("./middlewares/errorHandler");
 const errorController = require("./controllers/errorController");
 const {AllRoutes}= require("./routers/router")
 const app = express();
+
+
+//morgan Logger
+app.use(morgan("dev"))
 
 
 //config DotEnv
