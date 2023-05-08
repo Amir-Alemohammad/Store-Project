@@ -6,6 +6,7 @@ const connectDB = require("./configs/database");
 const {setHeaders} = require("./middlewares/handleHeaders");
 const {errorHandler} = require("./middlewares/errorHandler");
 const errorController = require("./controllers/errorController");
+const {AllRoutes}= require("./routers/router")
 const app = express();
 
 
@@ -18,18 +19,23 @@ dotenv.config({
 //config Data Base
 connectDB();
 
+//set Headers
+app.use(setHeaders);
+
 
 // Pars Body
 app.use(express.urlencoded({extended : false}));
 app.use(express.json());
 
-
 //Static Folder
 app.use(express.static(path.join(__dirname , "public")));
 
 
-//set Headers
-app.use(setHeaders);
+//Handle Routes
+app.use(AllRoutes);
+
+
+
 
 //Error Handeling
 app.use(errorController.get404);
