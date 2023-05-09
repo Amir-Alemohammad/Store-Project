@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const {authSchema} = require("../validators/user/authValidation");
+
 const userSchema = new mongoose.Schema({
     firstname:{
         type : String,
@@ -41,7 +43,7 @@ const userSchema = new mongoose.Schema({
         type : Number,
         default : 0,
     },
-    birthday : {
+    birt : {
         type : String,
     },
     Roles: {
@@ -49,7 +51,9 @@ const userSchema = new mongoose.Schema({
         default : ["USER"],
     }
 });
-
+userSchema.statics.userValidation = function(body){
+    return authSchema.validate(body,{abortEarly : true})
+}
 const userModel = mongoose.model("userModel",userSchema);
 
 

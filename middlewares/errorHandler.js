@@ -1,13 +1,13 @@
 const errorHandler = (error,req,res,next) => {
     const status = error?.statusCode || 500;
     const message = error.message;
-    const data = error.data;
-    console.log(error);
+    console.log(error.statusCode);
     res.status(status).json({
-        success : false,
-        status,
-        message,
-        data,
+        errors : {
+            success : false,
+            status,
+            message,
+        }
     });
 }
 module.exports = {
