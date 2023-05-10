@@ -10,7 +10,6 @@ const {setHeaders} = require("./middlewares/handleHeaders");
 const { errorHandler } = require("./middlewares/errorHandler");
 const errorController = require("./controllers/errorController");
 const {AllRoutes}= require("./routers/router");
-const { title } = require("process");
 const app = express();
 
 

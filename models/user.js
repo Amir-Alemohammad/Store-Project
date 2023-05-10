@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
         type : Object,
         default:{
             code : 0,
-            expires : 0
+            expiresIn : 0
         },
     },
     bills:{
@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
         type : [String],
         default : ["USER"],
     }
-});
+},{timestamps: true});
 userSchema.statics.userValidation = function(body){
     return authSchema.validate(body,{abortEarly : true})
 }

@@ -6,7 +6,7 @@ const router = Router();
 /**
  * @swagger
  * tags:
- *      name : IndexPage
+ *      name : Index Page
  *      description: های صفحه ی اصلی وبسایت api
  */
 /**
@@ -15,7 +15,7 @@ const router = Router();
  *  get:
  *      summary: index of routes
  *      tags:
- *          [IndexPage]
+ *          [Index Page]
  *      description: get all data for index page
  *      responses: 
  *              200:
