@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const {authSchema} = require("../validators/user/authValidation");
 
@@ -17,12 +18,14 @@ const userSchema = new mongoose.Schema({
     },
     phoneNumber:{
         type : String,
-        required : true
+        required : true,
+        unique: true,
     },
     email:{
         type : String,
         required : true,
         lowercase : true,
+        unique: true,
     },
     password:{
         type : String,
@@ -51,10 +54,24 @@ const userSchema = new mongoose.Schema({
         default : ["USER"],
     }
 },{timestamps: true});
-userSchema.statics.userValidation = function(body){
-    return authSchema.validate(body,{abortEarly : true})
-}
-const userModel = mongoose.model("userModel",userSchema);
 
+userSchema.statics.userValidation = function(body){
+    return authSchema.validate(body,{abortEarly : true});
+}
+
+//hashing password
+userSchema.pre("save",function(next){
+    let user = this;
+    if(!user.isModified("password")) return next();
+
+    bcrypt.hash(user.password,10,(err,hash)=>{
+        if(err) return next(err)
+        user.password = hash;
+        next();
+    })
+});
+
+
+const userModel = mongoose.model("userModel",userSchema);
 
 module.exports = userModel;
