@@ -56,20 +56,13 @@ const router = Router();
  *        
  */
 router.post("/register",authController.register);
-
-/**
- * @swagger
- *  tags:
- *      name: User Login
- *      description: User Login Section
- */
 /**
  * 
  * @swagger
- *  /user/login:
+ *  /user/getOtp:
  *          post:
- *              summary: user login with phoneNumber
- *              tags: [User Login]
+ *              summary: user getOtp with phoneNumber
+ *              tags: [User Authorization]
  *              parameters:
  *              -   name: phoneNumber
  *                  description: your phone number
@@ -86,7 +79,36 @@ router.post("/register",authController.register);
  *                  500:
  *                      description: Internal Server Errro  
  */
-router.post("/login",authController.login);
+router.post("/getOtp",authController.getOtp);
+/**
+ * 
+ * @swagger
+ *  /user/CheckOtp:
+ *          post:
+ *              summary: user checkOtp with phoneNumber and code
+ *              tags: [User Authorization]
+ *              parameters:
+ *              -   name: phoneNumber
+ *                  description: your phone number
+ *                  required: true
+ *                  in: formData
+ *                  type : string
+ *              -   name: code
+ *                  description: the code that was sent
+ *                  required: true
+ *                  in: formData
+ *                  type : string
+ *              responses:
+ *                  200:
+ *                      description: Success
+ *                  400:
+ *                      description: Bad Request 
+ *                  401:
+ *                      description: Unauthorization
+ *                  500:
+ *                      description: Internal Server Errro  
+ */
+router.post("/checkOtp",authController.checkOtp);
 
 module.exports = {
     userAuthRoute : router,
