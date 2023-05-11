@@ -1,5 +1,5 @@
 const userModel = require("../../../models/user");
-const {RandomNumberGenerator} = require("../../../utils/functions.js");
+const {RandomNumberGenerator, verifyRefreshToken} = require("../../../utils/functions.js");
 const {getOtpSchema,checkOtpSchema} = require('../../../validators/user/authValidation.js');
 const {EXPIRES_IN} = require("../../../utils/constans.js");
 
@@ -60,22 +60,22 @@ const getOtp = async (req,res,next) =>{
                     }
                 }
             });
-            const api = kavenegar.KavenegarApi({
-                apikey: "7A2F3653497459706B716D305A414F4C566C6E4B4B496452324377532F69494C5844732F5165317A376F343D"
-            });
-            api.VerifyLookup({
-                receptor: phoneNumber,
-                template: "Login",
-                token: code,
-            },function(response,status){
-                console.log(response);
-                console.log(status);
-            });
+            // const api = kavenegar.KavenegarApi({
+            //     apikey: process.env.API_SECRET_KEY,
+            // });
+            // api.VerifyLookup({
+            //     receptor: phoneNumber,
+            //     template: "Login",
+            //     token: code,
+            // },function(response,status){
+            //     console.log(response);
+            //     console.log(status);
+            // });
             res.status(200).json({
                 success : true,
                 statusCode : 200,
                 code,
-                message: "کد ورود با موفقیت برای شما ارسال شد",
+                message: "کد اعتبار سنجی با موفقیت برای شما ارسال شد",
             });
         }
     } catch (err) {
@@ -107,22 +107,53 @@ const checkOtp = async(req,res,next) => {
         const token = jwt.sign({
             user: user._id.toString(),
             phoneNumber,
-        },process.env.JWT_SECRET);
+        },process.env.JWT_SECRET,{expiresIn : "1h"});
+
+        const refreshToken = jwt.sign({
+            user: user._id.toString(),
+            phoneNumber,
+        },process.env.REFRESH_TOKEN_SECRET,{expiresIn: "1y"});
 
         res.status(200).json({
             success : true,
             statusCode : 200,
             message: "ورود با موفقیت انجام شد",
             accessToken : token,
+            refreshToken,
             userId: user._id.toString(),
         });
-        
     } catch (err) {
         next(err);
     }
 }
+const refreshToken = async(req,res,next) => {
+    try {
+        const {refreshToken} = req.body;
+
+        const phoneNumber = await verifyRefreshToken(refreshToken);
+
+        const user = await userModel.findOne({phoneNumber});
+        
+        const accessToken = jwt.sign({
+            user: user._id.toString(),
+            phoneNumber,
+        },process.env.JWT_SECRET,{expiresIn: "1h"});
+
+        const newRefreshToken = jwt.sign({
+            user: user._id.toString(),
+            phoneNumber,
+        },process.env.REFRESH_TOKEN_SECRET,{expiresIn: "1y"});
+        res.status(200).json({
+            accessToken,
+            RefreshToken : newRefreshToken,
+        });
+    } catch (err) {
+        next(err);
+    }
+}   
 module.exports = {
     register,
     getOtp,
     checkOtp,
+    refreshToken,
 }

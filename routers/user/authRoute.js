@@ -109,6 +109,24 @@ router.post("/getOtp",authController.getOtp);
  *                      description: Internal Server Errro  
  */
 router.post("/checkOtp",authController.checkOtp);
+/**
+ * @swagger
+ *  /user/refresh-token:
+ *              post:
+ *                  summary: Create Refresh Token
+ *                  tags: [User Authorization]
+ *                  description: new Token
+ *                  parameters:
+ *                  -   name: refreshToken
+ *                      in: formData
+ *                      required: true
+ *                      type: string
+ *                  responses:
+ *                          200:
+ *                              description: Success                     
+ *                          
+ */
+router.post("/refresh-Token",authController.refreshToken);
 
 module.exports = {
     userAuthRoute : router,
