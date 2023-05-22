@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const {authSchema} = require("../validators/user/authValidation");
 
+
 const userSchema = new mongoose.Schema({
     firstname:{
         type : String,
@@ -26,6 +27,10 @@ const userSchema = new mongoose.Schema({
         required : true,
         lowercase : true,
         unique: true,
+    },
+    refreshToken:{
+          type:String,
+          default: "Bearer Token"     
     },
     password:{
         type : String,
@@ -54,6 +59,9 @@ const userSchema = new mongoose.Schema({
         default : ["USER"],
     }
 },{timestamps: true});
+
+
+
 
 userSchema.statics.userValidation = function(body){
     return authSchema.validate(body,{abortEarly : true});

@@ -33,6 +33,7 @@ connectDB();
 app.use(setHeaders);
 
 
+
 // Pars Body
 app.use(express.urlencoded({extended : false}));
 app.use(express.json());
@@ -55,7 +56,7 @@ app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
         },
         servers:[
             {
-                url : "http://localhost:3000"
+                url : "http://127.0.0.1:3000"
             },
         ],
         
