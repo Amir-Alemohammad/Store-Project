@@ -1,7 +1,7 @@
 const userModel = require("../../../models/user");
 const {RandomNumberGenerator, verifyRefreshToken} = require("../../../utils/functions.js");
 const {getOtpSchema,checkOtpSchema} = require('../../../validators/user/authValidation.js');
-
+const {ROLES} = require("../../../utils/constans.js");
 
 const kavenegar = require("kavenegar");
 const jwt = require("jsonwebtoken");
@@ -30,6 +30,7 @@ const register = async (req,res,next) => {
             email,
             password,
             phoneNumber,
+            Roles: ROLES.USER,
           });
           res.status(201).json({
             success: true,
@@ -60,9 +61,9 @@ const getOtp = async (req,res,next) =>{
                     }
                 }
             });
-            // const api = kavenegar.KavenegarApi({
-            //     apikey: process.env.API_SECRET_KEY,
-            // });
+            const api = kavenegar.KavenegarApi({
+                apikey: process.env.API_SECRET_KEY,
+            });
             // api.VerifyLookup({
             //     receptor: phoneNumber,
             //     template: "Login",
@@ -151,6 +152,11 @@ const refreshToken = async(req,res,next) => {
             phoneNumber,
         },process.env.REFRESH_TOKEN_SECRET,{expiresIn: "1y"});
 
+        await userModel.updateOne({phoneNumber},{
+            $set:{
+                refreshToken: newRefreshToken,
+            }
+        })
 
         res.status(200).json({
             accessToken,
