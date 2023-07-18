@@ -16,7 +16,10 @@ const addCategory = async (req,res,next) => {
                 statusCode:201,
                 message: "دسته بندی با موفقیت افزوده شد"
             },
-            category,
+            category:{
+                title : category.title,
+                id : category._id
+            },
         })
     } catch (err) {
         next(err);
@@ -39,6 +42,7 @@ const editCategory = async (req,res,next) => {
 const getAllCategory = async (req,res,next) => {
     try {
         
+        
     } catch (err) {
         next(err);
     }
@@ -53,6 +57,17 @@ const getCategoryById = async (req,res,next) => {
 const getAllParents = async (req,res,next) => {
     try {
         
+        const parents = await categoryModel.find(
+            { parent: undefined },
+            { __v: 0 }
+        );
+        return res.status(200).json({
+            statusCode: 200,
+            data: {
+              parents,
+            },
+        });
+
     } catch (err) {
         next(err);
     }

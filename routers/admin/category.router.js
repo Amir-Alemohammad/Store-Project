@@ -32,6 +32,19 @@ const router = Router();
  * 
  */
 router.post("/add",categoryController.addCategory);
+/**
+ * @swagger
+ *  /admin/category/parents:
+ *      get:
+ *          summary: get all category of parents
+ *          tags: [Admin Panel]
+ *          description: get categories
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/parents",categoryController.getAllParents);
 
 
 module.exports = {
