@@ -11,8 +11,6 @@ const addCategory = async (req,res,next) => {
     try {
         await categorySchema.validate(req.body);
         const {title,parent} = req.body;
-        const parentExist = await categoryModel.findOne({_id : parent});
-        if(!parentExist) throw createError.NotFound("دسته بندی یافت نشد");
         const category = await categoryModel.create({title,parent});
         if(!category){
             const error = new Error("خطایی از سمت سرور رخ داده است");
@@ -63,7 +61,23 @@ const removeCategory = async (req,res,next) => {
 }
 const editCategory = async (req,res,next) => {
     try {
-        
+        await mongoIdValidation.validate(req.params);
+        const {id} = req.params;
+        const {title} = req.body;
+        const category = await categoryModel.findById(id);
+        if(!category) throw createError.NotFound("دسته بندی جهت ویرایش وجود ندارد")
+        const updateResult = await categoryModel.updateOne({_id : id},{
+            $set:{
+                title,
+            }
+        })
+        if(updateResult.modifiedCount == 0) throw createError.InternalServerError("خطایی از سمت سرور رخ داده است");
+        return res.status(200).json({
+            data:{
+                statusCode: 200,
+                message: "ویرایش دسته بندی با موفقیت انجام شد"
+            }
+        })
     } catch (err) {
         next(err);
     }
@@ -184,7 +198,10 @@ const getAllCategoryWithoutPopulate = async (req,res,next) => {
             {$match: {}}
         ]);
         return res.status(200).json({
-            categories
+            data:{
+                statusCode: 200,
+                categories
+            }
         })
     } catch (error) {
         next(error)
