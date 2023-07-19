@@ -11,7 +11,7 @@ const addCategory = async (req,res,next) => {
     try {
         await categorySchema.validate(req.body);
         const {title,parent} = req.body;
-        const parentExist = await categoryModel.findOne({parent});
+        const parentExist = await categoryModel.findOne({_id : parent});
         if(!parentExist) throw createError.NotFound("دسته بندی یافت نشد");
         const category = await categoryModel.create({title,parent});
         if(!category){
@@ -70,35 +70,36 @@ const editCategory = async (req,res,next) => {
 }
 const getAllCategory = async (req,res,next) => {
     try {
-        const category = await categoryModel.aggregate([
-            {
-                $graphLookup:{
-                    from : "categorymodels",
-                    startWith : "$_id",
-                    connectFromField : "_id",
-                    connectToField : "parent",
-                    maxDepth : 5,
-                    depthField : "depth",
-                    as : "children"
-                },
-            },
-            {
-                $project:{
-                    __v : 0,
-                    "children.__v": 0,
-                    "children.parent" : 0,
-                }
-            },
-            {
-                $match:{
-                    parent: undefined
-                }
-            },
-        ]);
+        // const category = await categoryModel.aggregate([
+        //     {
+        //         $graphLookup:{
+        //             from : "categorymodels",
+        //             startWith : "$_id",
+        //             connectFromField : "_id",
+        //             connectToField : "parent",
+        //             maxDepth : 5,
+        //             depthField : "depth",
+        //             as : "children"
+        //         },
+        //     },
+        //     {
+        //         $project:{
+        //             __v : 0,
+        //             "children.__v": 0,
+        //             "children.parent" : 0,
+        //         }
+        //     },
+        //     {
+        //         $match:{
+        //             parent: undefined
+        //         }
+        //     },
+        // ]);
+        const categories = await categoryModel.find({parent : undefined},{__v : 0});
         return res.status(200).json({
             data:{
                 statusCode : 200,
-                category
+                categories
             }
         })
     } catch (err) {
@@ -177,6 +178,20 @@ const getChildOfParents = async (req,res,next) => {
         next(err);
     }
 }
+const getAllCategoryWithoutPopulate = async (req,res,next) => {
+    try {
+        const categories = await categoryModel.aggregate([
+            {$match: {}}
+        ]);
+        return res.status(200).json({
+            categories
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 module.exports = {  
     addCategory,
     removeCategory,
@@ -185,4 +200,5 @@ module.exports = {
     getCategoryById,
     getAllParents,
     getChildOfParents,
+    getAllCategoryWithoutPopulate,
 }

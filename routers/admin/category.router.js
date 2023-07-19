@@ -47,6 +47,32 @@ router.post("/add",categoryController.addCategory);
 router.get("/parents",categoryController.getAllParents);
 /**
  * @swagger
+ *  /admin/category/all:
+ *      get:
+ *          summary: get all categories
+ *          tags: [Admin Panel]
+ *          description: get all categories
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/all",categoryController.getAllCategory)
+/**
+ * @swagger
+ *  /admin/category/list-of-all:
+ *      get:
+ *          summary: get all categories without populate and nested structure
+ *          tags: [Admin Panel]
+ *          description: get all categories
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/list-of-all",categoryController.getAllCategoryWithoutPopulate)
+/**
+ * @swagger
  *  /admin/category/children/{id}:
  *      get:
  *          summary: get all category of children
@@ -63,19 +89,6 @@ router.get("/parents",categoryController.getAllParents);
  * 
  */
 router.get("/children/:id",categoryController.getChildOfParents);
-/**
- * @swagger
- *  /admin/category/all:
- *      get:
- *          summary: get all category
- *          tags: [Admin Panel]
- *          description: get all categories
- *          responses: 
- *              200:
- *                 description: success
- * 
- */
-router.get("/all",categoryController.getAllCategory)
 /**
  * @swagger
  *  /admin/category/remove/{id}:
