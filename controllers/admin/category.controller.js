@@ -1,5 +1,10 @@
+const createError = require("http-errors")
+
 const categoryModel = require("../../models/categories");
 const { categorySchema } = require("../../validators/admin/category.validation");
+const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
+
+
 
 const addCategory = async (req,res,next) => {
     try {
@@ -27,7 +32,25 @@ const addCategory = async (req,res,next) => {
 }
 const removeCategory = async (req,res,next) => {
     try {
-        
+        await mongoIdValidation.validate(req.params);
+
+        const {id} = req.params;
+
+        const category = await categoryModel.findById(id);
+
+        if(!category) throw createError.NotFound("دسته بندی پیدا نشد");
+
+        const deleteCategory = await categoryModel.deleteOne({_id : category._id});
+
+        if(deleteCategory.deletedCount == 0) throw createError.InternalServerError("خطای سرور رخ داده است");
+
+        return res.status(200).json({
+            data:{
+                statusCode : 200,
+                message: "حذف دسته بندی با موفقیت انجام شد",
+            }
+        });
+
     } catch (err) {
         next(err);
     }
@@ -41,8 +64,29 @@ const editCategory = async (req,res,next) => {
 }
 const getAllCategory = async (req,res,next) => {
     try {
-        
-        
+        const category = await categoryModel.aggregate([
+            {
+                $lookup:{
+                    from : "categorymodels",
+                    localField : "_id",
+                    foreignField : "parent",
+                    as : "children"
+                },
+            },
+            {
+                $project:{
+                    __v : 0,
+                    "children.__v": 0,
+                    "children.parent" : 0,
+                }
+            }
+        ]);
+        return res.status(200).json({
+            data:{
+                statusCode : 200,
+                category
+            }
+        })
     } catch (err) {
         next(err);
     }
@@ -62,8 +106,8 @@ const getAllParents = async (req,res,next) => {
             { __v: 0 }
         );
         return res.status(200).json({
-            statusCode: 200,
             data: {
+              statusCode: 200,
               parents,
             },
         });
@@ -74,15 +118,22 @@ const getAllParents = async (req,res,next) => {
 }
 const getChildOfParents = async (req,res,next) => {
     try {
-        
+        await mongoIdValidation.validate(req.params);
+        const {id} = req.params;
+        const children = await categoryModel.find(
+            {parent : id},
+            {__v : 0}    
+        );
+        return res.status(200).json({
+            data:{
+                statusCode : 200,
+                children
+            }
+        })
     } catch (err) {
         next(err);
     }
 }
-
-
-
-
 module.exports = {  
     addCategory,
     removeCategory,

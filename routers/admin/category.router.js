@@ -45,6 +45,56 @@ router.post("/add",categoryController.addCategory);
  * 
  */
 router.get("/parents",categoryController.getAllParents);
+/**
+ * @swagger
+ *  /admin/category/children/{id}:
+ *      get:
+ *          summary: get all category of children
+ *          tags: [Admin Panel]
+ *          description: get categories of children
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/children/:id",categoryController.getChildOfParents);
+/**
+ * @swagger
+ *  /admin/category/all:
+ *      get:
+ *          summary: get all category
+ *          tags: [Admin Panel]
+ *          description: get all categories
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/all",categoryController.getAllCategory)
+/**
+ * @swagger
+ *  /admin/category/remove/{id}:
+ *      delete:
+ *          summary: delete category
+ *          tags: [Admin Panel]
+ *          description: delete categories by id
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.delete("/remove/:id",categoryController.removeCategory)
+
 
 
 module.exports = {

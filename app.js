@@ -15,7 +15,10 @@ const app = express();
 
 
 //morgan Logger
-app.use(morgan("dev"))
+if(process.env.NODE_ENV === "development"){
+    app.use(morgan("dev"))
+}
+    
 
 
 
@@ -80,5 +83,5 @@ app.use(errorHandler);
 
 
 app.listen(process.env.PORT,()=>{
-    console.log(`Server Running : http://localhost:${process.env.PORT}`)
+    console.log(`Server Running : http://localhost:${process.env.PORT} on ${process.env.NODE_ENV} mode`)
 })
