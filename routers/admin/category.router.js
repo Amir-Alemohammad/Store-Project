@@ -94,6 +94,24 @@ router.get("/all",categoryController.getAllCategory)
  * 
  */
 router.delete("/remove/:id",categoryController.removeCategory)
+/**
+ * @swagger
+ *  /admin/category/{id}:
+ *      get:
+ *          summary: get category by id
+ *          tags: [Admin Panel]
+ *          description: get category by id
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses: 
+ *              200:
+ *                 description: success
+ * 
+ */
+router.get("/:id",categoryController.getCategoryById)
 
 
 

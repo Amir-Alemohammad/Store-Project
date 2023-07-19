@@ -3,6 +3,7 @@ const createError = require("http-errors")
 const categoryModel = require("../../models/categories");
 const { categorySchema } = require("../../validators/admin/category.validation");
 const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
+const mongoose = require("mongoose");
 
 
 
@@ -10,6 +11,8 @@ const addCategory = async (req,res,next) => {
     try {
         await categorySchema.validate(req.body);
         const {title,parent} = req.body;
+        const parentExist = await categoryModel.findOne({parent});
+        if(!parentExist) throw createError.NotFound("دسته بندی یافت نشد");
         const category = await categoryModel.create({title,parent});
         if(!category){
             const error = new Error("خطایی از سمت سرور رخ داده است");
@@ -40,9 +43,12 @@ const removeCategory = async (req,res,next) => {
 
         if(!category) throw createError.NotFound("دسته بندی پیدا نشد");
 
-        const deleteCategory = await categoryModel.deleteOne({_id : category._id});
+        const deleteResult = await categoryModel.deleteMany({
+            $or: [{ _id: category._id }, { parent: category._id }],
+          });
+        
 
-        if(deleteCategory.deletedCount == 0) throw createError.InternalServerError("خطای سرور رخ داده است");
+        if(deleteResult.deletedCount == 0) throw createError.InternalServerError("خطای سرور رخ داده است");
 
         return res.status(200).json({
             data:{
@@ -66,10 +72,13 @@ const getAllCategory = async (req,res,next) => {
     try {
         const category = await categoryModel.aggregate([
             {
-                $lookup:{
+                $graphLookup:{
                     from : "categorymodels",
-                    localField : "_id",
-                    foreignField : "parent",
+                    startWith : "$_id",
+                    connectFromField : "_id",
+                    connectToField : "parent",
+                    maxDepth : 5,
+                    depthField : "depth",
                     as : "children"
                 },
             },
@@ -79,7 +88,12 @@ const getAllCategory = async (req,res,next) => {
                     "children.__v": 0,
                     "children.parent" : 0,
                 }
-            }
+            },
+            {
+                $match:{
+                    parent: undefined
+                }
+            },
         ]);
         return res.status(200).json({
             data:{
@@ -93,7 +107,36 @@ const getAllCategory = async (req,res,next) => {
 }
 const getCategoryById = async (req,res,next) => {
     try {
+        await mongoIdValidation.validate(req.params)
+        const {id} = req.params;
+        const category = await categoryModel.aggregate([
+            {
+                $match:{_id : new mongoose.Types.ObjectId(id)}
+            },
+            {
+                $lookup:{
+                    from: "categorymodels",
+                    localField: "_id",
+                    foreignField: "parent",
+                    as : "children",
+                },
+            },
+            {
+                $project: {
+                    __v : 0,
+                    "children.__v": 0,
+                    "children.parent" : 0,
+                }
+            },
+        ]);
+
+        if(category.length == 0) throw createError.NotFound("دسته بندی پیدا نشد");
         
+        return res.status(200).json({
+            data:{
+                category
+            }
+        });
     } catch (err) {
         next(err);
     }
