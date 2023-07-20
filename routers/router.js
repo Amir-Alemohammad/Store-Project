@@ -3,6 +3,7 @@ const {Router} = require("express");
 const {HomeRoute} = require("./api/index");
 const {userAuthRoute} = require("./user/authRoute");
 const { categoryRoute } = require("./admin/category.router");
+const { blogRoutes } = require("./admin/blog.router");
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.use("/user",userAuthRoute);
 
 router.use("/admin/category",categoryRoute);
 
+router.use("/admin/blogs",blogRoutes)
 
 
 

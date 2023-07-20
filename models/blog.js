@@ -1,8 +1,23 @@
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
-
-})
+    user : {
+        type: mongoose.Types.ObjectId,
+        ref: "user",
+        required: true,
+    },
+    comment : {
+        type: String,
+        required : true,
+    },
+    createdAt : {
+        type: Date,
+        deafult : new Date().now(),
+    },
+    parent:{
+        type: mongoose.Types.ObjectId,
+    }
+});
 
 const blogSchema = new mongoose.Schema({
     author: {
@@ -10,6 +25,10 @@ const blogSchema = new mongoose.Schema({
         required: true,
     },
     title: {
+        type: String,
+        required: true,
+    },
+    shortText: {
         type: String,
         required: true,
     },
@@ -26,7 +45,7 @@ const blogSchema = new mongoose.Schema({
         default: [],
     },
     category: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         required: true,
     },
     comment: {
@@ -36,16 +55,19 @@ const blogSchema = new mongoose.Schema({
     like: {
         type: [mongoose.Types.ObjectId],
         default: [],
+        ref: "user"
     },
     deslike: {
         type: [mongoose.Types.ObjectId],
         default: [],
+        ref: "user"
     },
     bookmark: {
         type: [mongoose.Types.ObjectId],
         default: [],
+        ref: "user"
     },
-});
+},{timestamps : true , versionKey : false});
 
 
 const blogModel = mongoose.model("blogModel", blogSchema);
