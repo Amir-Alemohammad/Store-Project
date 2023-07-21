@@ -1,6 +1,17 @@
+const blogModel = require("../../models/blog")
+
+
+
 const createBlog = async (req,res,next) =>{
     try {
-        
+        console.log(req.file)
+        await blogModel.blogValidation(req.body)
+        return res.status(201).json({
+            statusCode: 201,
+            data:{
+                message: "پست شما با موفقیت ساخته شد"
+            }
+        })
     } catch (error) {
         next(error)
     }

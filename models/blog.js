@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { blogSchemaValidation } = require("../validators/admin/blog.validation");
 
 const commentSchema = new mongoose.Schema({
     user : {
@@ -12,7 +13,7 @@ const commentSchema = new mongoose.Schema({
     },
     createdAt : {
         type: Date,
-        deafult : new Date().now(),
+        deafult : new Date().now,
     },
     parent:{
         type: mongoose.Types.ObjectId,
@@ -68,6 +69,11 @@ const blogSchema = new mongoose.Schema({
         ref: "user"
     },
 },{timestamps : true , versionKey : false});
+
+
+blogSchema.statics.blogValidation = function(body){
+    return blogSchemaValidation.validate(body);
+}
 
 
 const blogModel = mongoose.model("blogModel", blogSchema);
