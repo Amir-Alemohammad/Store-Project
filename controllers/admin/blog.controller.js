@@ -4,11 +4,24 @@ const blogModel = require("../../models/blog")
 
 const createBlog = async (req,res,next) =>{
     try {
-        await blogModel.blogValidation(req.body)
+        await blogModel.blogValidation(req.body);
+        const {title,shortText,text,tags,category,fileUploadPath,filename} = req.body;
+        const image = req.body.image = fileUploadPath + "/" + filename;
+        const author = req.userId;
+        const blog = await blogModel.create({
+            author,
+            title,
+            shortText,
+            text,
+            image,
+            tags,
+            category,
+
+        });
         return res.status(201).json({
             statusCode: 201,
             data:{
-                message: "پست شما با موفقیت ساخته شد"
+                message: "پست شما با موفقیت ساخته شد",
             }
         })
     } catch (error) {

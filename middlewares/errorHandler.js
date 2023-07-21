@@ -1,13 +1,16 @@
+const createHttpError = require("http-errors");
+
 const errorHandler = (error,req,res,next) => {
-    const status = error?.statusCode || 500;
-    const message = error.message;
-    console.log(error);
-    res.status(status).json({
-        errors : {
-            success : false,
-            status,
-            message,
-        }
+    const serverError = createHttpError.InternalServerError();
+    const statusCode = error.status || serverError.status;
+    const message = error.message || serverError.message;
+    console.log(statusCode)
+    console.log(message)
+    return res.status(statusCode).json({
+      statusCode,
+      errors: {
+        message,
+      },
     });
 }
 module.exports = {

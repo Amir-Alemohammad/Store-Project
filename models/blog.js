@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
     },
     createdAt : {
         type: Date,
-        deafult : new Date().now,
+        deafult : new Date().getTime(),
     },
     parent:{
         type: mongoose.Types.ObjectId,

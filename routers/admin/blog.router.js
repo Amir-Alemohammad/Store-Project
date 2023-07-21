@@ -2,7 +2,8 @@ const {Router} = require("express");
 
 const AdminBlogController = require("../../controllers/admin/blog.controller");
 const { uploadFile } = require("../../utils/multer");
-const { stringToArray } = require("../../middlewares/stringToArray")
+const { stringToArray } = require("../../middlewares/stringToArray");
+const { authenticated } = require("../../middlewares/verifyAccessToken");
 
 const router = Router();
 
@@ -63,7 +64,7 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  *                  description: Success - blog created 
  * 
  * */
-router.post("/add",uploadFile.single("image"), stringToArray("tags") , AdminBlogController.createBlog);
+router.post("/add",authenticated,uploadFile, stringToArray("tags") , AdminBlogController.createBlog);
 
 
 module.exports = {

@@ -1,33 +1,49 @@
 const multer = require("multer");
+const shortid = require("shortid");
 
 const path = require("path")
-const fs = require("fs")
+const fs = require("fs");
+const createHttpError = require("http-errors");
 
-function createRoute () {
-    const date = new Date();
-    const Year = date.getFullYear().toString(); 
-    const Month = date.getMonth().toString(); 
-    const Day = date.getDay().toString();
-    const directory = path.join(__dirname , ".." , "public" , "uploads" , "blogs" , Year , Month , Day);
+function createRoute (req) {
+    let d = new Date();
+    const year = d.getFullYear() + "";
+    const month = d.getMonth() + 1 + "";
+    const day = d.getDate() + "";
+    const directory = path.join(__dirname , ".." , "public" , "uploads" , "blogs" , year , month , day);
+    
+    req.body.fileUploadPath = path.join("uploads" , "blogs" , year , month , day).replace(/\\/g,"/");
+    
     fs.mkdirSync(directory , {recursive : true});
     return directory;
 }
 
 const storage = multer.diskStorage({
     destination: (req , file , cb) => {
-        const filePath = createRoute();
+        const filePath = createRoute(req);
         cb(null,filePath)
     },
     filename: (req , file , cb) => {
-        const ext = path.extname(file.originalname);
-        const fileName = String(new Date().getTime + ext);
+        const fileName = `${shortid.generate()}_${file.originalname}`;
+        req.body.filename = fileName;
         cb(null , fileName)
     }
 });
 
+const fileFilter = function(req , file , cb){
+    const mimetypes = ["image/jpg","image/gif","image/jpeg","image/png","image/webp"]
+    if(!mimetypes.includes(file.mimetype)){
+        return cb(createHttpError.BadRequest("فرمت ارسال شده صحیح نمی باشد"))
+    }else{
+        return cb(null,true)
+    }
+}
+
+
 const uploadFile = multer({
     storage,
-});
+    fileFilter
+}).single("image");
 
 module.exports = {
     uploadFile,
