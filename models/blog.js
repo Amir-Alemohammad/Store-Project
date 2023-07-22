@@ -23,6 +23,7 @@ const commentSchema = new mongoose.Schema({
 const blogSchema = new mongoose.Schema({
     author: {
         type: mongoose.Types.ObjectId,
+        ref: "user",
         required: true,
     },
     title: {
@@ -47,6 +48,7 @@ const blogSchema = new mongoose.Schema({
     },
     category: {
         type: [mongoose.Types.ObjectId],
+        ref: "category",
         required: true,
     },
     comment: {

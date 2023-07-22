@@ -1,6 +1,11 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user");
 const createError = require("http-errors");
+
+
+const userModel = require("../models/user");
+const path = require("path")
+const fs = require("fs")
+
 
 const RandomNumberGenerator = () =>{
     return Math.floor(Math.random() * 90000 + 10000);
@@ -30,7 +35,12 @@ const verifyRefreshToken =  (refreshToken)=>{
     });
     
 }
+function deleteFileInPublic(fileAddress){
+    const filePath = path.join(__dirname , ".." , "public" , fileAddress);
+    fs.unlinkSync(filePath)
+}
 module.exports = {
     RandomNumberGenerator,
     verifyRefreshToken,
+    deleteFileInPublic,
 }

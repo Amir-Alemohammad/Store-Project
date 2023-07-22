@@ -58,7 +58,8 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  *                  required: true
  *              -   in: formData
  *                  name: category
- *                  type: string 
+ *                  type: string
+ *                  required: true 
  *          responses:
  *              201:
  *                  description: Success - blog created 

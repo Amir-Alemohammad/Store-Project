@@ -1,13 +1,25 @@
-const blogModel = require("../../models/blog")
-
+const createHttpError = require("http-errors");
+const blogModel = require("../../models/blog");
+const categoryModel = require("../../models/categories");
+const { deleteFileInPublic } = require("../../utils/functions");
 
 
 const createBlog = async (req,res,next) =>{
     try {
-        await blogModel.blogValidation(req.body);
         const {title,shortText,text,tags,category,fileUploadPath,filename} = req.body;
+        
         const image = req.body.image = fileUploadPath + "/" + filename;
+        
         const author = req.userId;
+
+        await blogModel.blogValidation(req.body);
+        
+        const categories = await categoryModel.findOne({
+            _id : category
+        })
+
+        if(!categories) throw createHttpError.BadRequest("دسته بندی یافت نشد")
+
         const blog = await blogModel.create({
             author,
             title,
@@ -25,6 +37,7 @@ const createBlog = async (req,res,next) =>{
             }
         })
     } catch (error) {
+        deleteFileInPublic(req.body.image)
         next(error)
     }
 }
@@ -37,10 +50,55 @@ const getBlogById = async (req,res,next) =>{
 }
 const getListOfBlogs = async (req,res,next) =>{
     try {
+        const blogs = await blogModel.aggregate([
+            {
+                $match: {}
+            },
+            {
+                $lookup:{
+                    from: "usermodels",
+                    foreignField: "_id",
+                    localField: "author" ,
+                    as: "author",
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $project:{
+                    "author.otp" : 0,
+                    "author.refreshToken" : 0,
+                    "author.discount" : 0,
+                    "author.bills": 0,
+                    "author.Roles": 0,
+                    "author.__v": 0,
+                    "author.createdAt": 0,
+                    "author.updatedAt": 0,
+                }
+            },
+            {
+                $lookup:{
+                    from: "categorymodels",
+                    foreignField: "_id",
+                    localField: "category" ,
+                    as: "category",
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $project:{
+                    "category.__v":0,
+                }
+            }
+
+        ])
         return res.status(200).json({
             statusCode: 200,
             data:{
-                blogs : []
+                blogs
             }
         })
     } catch (error) {
