@@ -67,6 +67,42 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  * */
 router.post("/add",authenticated,uploadFile, stringToArray("tags") , AdminBlogController.createBlog);
 
+/**
+ * @swagger
+ *  /admin/blogs/{id}:
+ *      get:
+ *          tags: [Blog(AdminPanel)]
+ *          summary: get blog by id
+ *          parameters: 
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success  
+ * 
+ * */
+router.get("/:id",AdminBlogController.getBlogById);
+
+/**
+ * @swagger
+ *  /admin/blogs/remove/{id}:
+ *      delete:
+ *          tags: [Blog(AdminPanel)]
+ *          summary: delete blog by id
+ *          parameters: 
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success  
+ * 
+ * */
+router.delete("/remove/:id",AdminBlogController.deleteBlogById);
+
 
 module.exports = {
     blogRoutes : router,

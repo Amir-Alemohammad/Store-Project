@@ -70,7 +70,14 @@ const blogSchema = new mongoose.Schema({
         default: [],
         ref: "user"
     },
-},{timestamps : true , versionKey : false});
+},{
+    timestamps: true,
+    versionKey: false,
+});
+
+
+
+
 
 
 blogSchema.statics.blogValidation = function(body){

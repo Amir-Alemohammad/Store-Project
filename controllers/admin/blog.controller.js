@@ -1,7 +1,10 @@
 const createHttpError = require("http-errors");
+
 const blogModel = require("../../models/blog");
 const categoryModel = require("../../models/categories");
 const { deleteFileInPublic } = require("../../utils/functions");
+const {mongoIdValidation} = require("../../validators/admin/mongoId.validation");
+const { default: mongoose } = require("mongoose");
 
 
 const createBlog = async (req,res,next) =>{
@@ -43,7 +46,61 @@ const createBlog = async (req,res,next) =>{
 }
 const getBlogById = async (req,res,next) =>{
     try {
+        await mongoIdValidation.validate(req.params);
         
+        const {id} = req.params;
+        
+        const blog = await blogModel.aggregate([
+            {
+                $match: {_id : new mongoose.Types.ObjectId(id)}
+            },
+            {
+                $lookup:{
+                    from: "categorymodels",
+                    foreignField: "_id",
+                    localField: "category",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $lookup:{
+                    from: "usermodels",
+                    foreignField: "_id",
+                    localField: "author",
+                    as: "author"
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $project:{
+                    "category.__v":0,
+                    "author.refreshToken":0,
+                    "author.password":0,
+                    "author.otp":0,
+                    "author.discount":0,
+                    "author.bills":0,
+                    "author.Roles":0,
+                    "author.createdAt":0,
+                    "author.updatedAt":0,
+                    "author.__v":0,
+                },
+            }
+
+        ]);
+
+        if(blog.length <= 0) throw createHttpError.NotFound("پستی با این مشخصات پیدا نشد");
+        
+        return res.status(200).json({
+            data:{
+                statusCode : 200,
+                blog,
+            }
+        })
     } catch (error) {
         next(error)
     }
@@ -114,7 +171,28 @@ const getCommentOfBlog = async (req,res,next) =>{
 }
 const deleteBlogById = async (req,res,next) =>{
     try {
+        await mongoIdValidation.validate(req.params)
+        const {id} = req.params;
         
+        const blog = await blogModel.findOne({_id : id});
+
+        if(!blog) throw createHttpError.NotFound("پست مورد نظر پیدا نشد")
+        
+        const deleteResult = await blogModel.deleteOne({_id : id})
+        
+        if(deleteResult.deletedCount == 0) throw createError.InternalServerError("خطای سرور رخ داده است");
+        
+        if(blog.image !== "undefined/undefined"){
+            deleteFileInPublic(blog.image)
+        }
+        
+
+        return res.status(200).json({
+            data:{
+                statusCode: 200,
+                message: "پست مورد نظر با موفقیت حذف شد",
+            }
+        })
     } catch (error) {
         next(error)
     }

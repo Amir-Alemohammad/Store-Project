@@ -40,7 +40,7 @@ const removeCategory = async (req,res,next) => {
         const category = await categoryModel.findById(id);
 
         if(!category) throw createError.NotFound("دسته بندی پیدا نشد");
-
+        
         const deleteResult = await categoryModel.deleteMany({
             $or: [{ _id: category._id }, { parent: category._id }],
           });
@@ -131,8 +131,8 @@ const getCategoryById = async (req,res,next) => {
             {
                 $lookup:{
                     from: "categorymodels",
-                    localField: "_id",
                     foreignField: "parent",
+                    localField: "_id",
                     as : "children",
                 },
             },
