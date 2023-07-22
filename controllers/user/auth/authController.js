@@ -108,7 +108,7 @@ const checkOtp = async (req, res, next) => {
         const token = jwt.sign({
             user: user._id.toString(),
             phoneNumber,
-        }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
 
         const refreshToken = jwt.sign({
