@@ -199,7 +199,38 @@ const deleteBlogById = async (req,res,next) =>{
 }
 const updateBlogById = async (req,res,next) =>{
     try {
+        await mongoIdValidation.validate(req.params)
         
+        const {id} = req.params;
+        
+        const {title , shortText , text , tags , fileUploadPath , filename , category} = req.body;
+    
+        const image = req.body.image = fileUploadPath + "/" + filename;
+
+        const blog = await blogModel.findById(id);
+            
+        if(!blog) throw createHttpError.NotFound("پستی بااین مشخصات پیدا نشد")
+
+        const updateResult = await blogModel.updateOne({_id : id},{
+            $set:{
+                title,
+                shortText,
+                text,
+                tags,
+                image,
+                category
+            }
+        });
+        
+        if(updateResult.modifiedCount == 0) throw createHttpError.InternalServerError("ویرایش پست به دلیل خطای سرور انجام نشد")
+
+        return res.status(200).json({
+            data:{
+                statusCode: 200,
+                message: "پست مورد نظر با موفقیت ویرایش شد"
+            }
+        })
+
     } catch (error) {
         next(error)
     }

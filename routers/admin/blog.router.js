@@ -103,6 +103,46 @@ router.get("/:id",AdminBlogController.getBlogById);
  * */
 router.delete("/remove/:id",AdminBlogController.deleteBlogById);
 
+/**
+ * @swagger
+ *  /admin/blogs/edit/{id}:
+ *      put:
+ *          tags: [Blog(AdminPanel)]
+ *          summary: edit blog
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *              -   in: formData
+ *                  name: title
+ *                  type: string
+ *              -   in: formData
+ *                  name: shortText
+ *                  type: string
+ *              -   in: formData
+ *                  name: text
+ *                  type: string
+ *              -   in: formData
+ *                  name: tags
+ *                  type: string
+ *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
+ *              -   in: formData
+ *                  name: image
+ *                  type: file                 
+ *              -   in: formData
+ *                  name: category
+ *                  type: string
+ *          responses:
+ *              200:
+ *                  description: Success 
+ * 
+ * */
+router.put("/edit/:id" , uploadFile ,stringToArray("tags"), AdminBlogController.updateBlogById);
+
+
+
+
 
 module.exports = {
     blogRoutes : router,
