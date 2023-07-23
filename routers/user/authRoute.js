@@ -6,10 +6,74 @@ const router = Router();
 
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          getOtp:
+ *              type: object
+ *              required:
+ *                  -   phoneNumber
+ *              properties:
+ *                  phoneNumber:
+ *                      type: string
+ *                      description: user phone number for signin/signup
+ *          CheckOtp:
+ *              type: object
+ *              required:
+ *                  -   phoneNumber
+ *                  -   code
+ *              properties:
+ *                  phoneNumber:
+ *                      type: string
+ *                      description: user phone number for signin/signup
+ *                  code:
+ *                      type: integer
+ *                      description: recived code from getOTP
+ *          register:
+ *              type: object
+ *              required:
+ *                  -   phoneNumber
+ *                  -   firstname
+ *                  -   lastname
+ *                  -   email
+ *                  -   password
+ *              properties:
+ *                  phoneNumber:
+ *                      type: string
+ *                      description: user phone number for signin/signup
+ *                  firstname:
+ *                      type: string
+ *                      description: user firstname for signup
+ *                  lastname:
+ *                      type: string
+ *                      description: user lastname for signup
+ *                  email:
+ *                      type: string
+ *                      description: user email for signup
+ *                  password:
+ *                      type: string
+ *                      description: user password for signup
+ *          refreshToken:
+ *              type: object
+ *              required: 
+ *                  -   refreshToken
+ *              properties:
+ *                  refreshToken:
+ *                      type: string
+ *                      description: refresh token 
+ *
+ */
+
+
+
+
+/**
+ * @swagger
  *  tags:
  *      name: User Authorization
  *      description: User Auth Section
  */
+
+
 /**
  * @swagger
  * 
@@ -18,32 +82,15 @@ const router = Router();
  *              summary: register user in user panel
  *              tags : [User Authorization]
  *              description: register user
- *              parameters:
- *              -   name: phoneNumber
- *                  description: fa-IRI phone number
- *                  in: formData
+ *              requestBody:
  *                  required: true
- *                  type: string
- *              -   name: firstname
- *                  description: your name
- *                  in: formData
- *                  required: true
- *                  type: string
- *              -   name: lastname
- *                  description: your last name
- *                  required: true
- *                  in: formData
- *                  type : string
- *              -   name: email
- *                  description: your email address
- *                  required: true
- *                  in: formData
- *                  type: string
- *              -   name: password
- *                  description: your password
- *                  required: true
- *                  in: formData
- *                  type: string
+ *                  content: 
+ *                      application/x-www-form-urlencoded:
+ *                         schema:
+ *                             $ref: '#/components/schemas/register'
+ *                      application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/register'        
  *              responses:
  *                      201:
  *                          description: Success
@@ -63,12 +110,16 @@ router.post("/register",authController.register);
  *          post:
  *              summary: user getOtp with phoneNumber
  *              tags: [User Authorization]
- *              parameters:
- *              -   name: phoneNumber
- *                  description: your phone number
+ *              requestBody:
  *                  required: true
- *                  in: formData
- *                  type : string
+ *                  content: 
+ *                      application/x-www-form-urlencoded:
+ *                         schema:
+ *                             $ref: '#/components/schemas/getOtp'
+ *                      application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/getOtp' 
+ * 
  *              responses:
  *                  200:
  *                      description: Success
@@ -87,17 +138,15 @@ router.post("/getOtp",authController.getOtp);
  *          post:
  *              summary: user checkOtp with phoneNumber and code
  *              tags: [User Authorization]
- *              parameters:
- *              -   name: phoneNumber
- *                  description: your phone number
+ *              requestBody:
  *                  required: true
- *                  in: formData
- *                  type : string
- *              -   name: code
- *                  description: the code that was sent
- *                  required: true
- *                  in: formData
- *                  type : string
+ *                  content: 
+ *                      application/x-www-form-urlencoded:
+ *                         schema:
+ *                             $ref: '#/components/schemas/CheckOtp'
+ *                      application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/CheckOtp' 
  *              responses:
  *                  200:
  *                      description: Success
@@ -116,11 +165,15 @@ router.post("/checkOtp",authController.checkOtp);
  *                  summary: Create Refresh Token
  *                  tags: [User Authorization]
  *                  description: new Token
- *                  parameters:
- *                  -   name: refreshToken
- *                      in: formData
+ *                  requestBody:
  *                      required: true
- *                      type: string
+ *                      content: 
+ *                          application/x-www-form-urlencoded:
+ *                              schema:
+ *                                  $ref: '#/components/schemas/refreshToken'
+ *                          application/json:
+ *                              schema:
+ *                                  $ref: '#/components/schemas/refreshTone' 
  *                  responses:
  *                          200:
  *                              description: Success                     

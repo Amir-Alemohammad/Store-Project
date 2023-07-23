@@ -48,6 +48,7 @@ app.use(express.static(path.join(__dirname , "public")));
 //Swagger Ui
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
     definition : {
+        openapi:"3.0.0",
         info : {
             title : "Amir Store",
             version : "2.0.0",
@@ -59,14 +60,16 @@ app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
         },
         servers:[
             {
-                url : "http://127.0.0.1:3000"
+                url : "http://127.0.0.1:3000/api-docs"
             },
         ],
         
     },
     apis: ["./routers/*/*.js"],
 
-})));
+}),{explorer: true}
+
+));
 
 
 
