@@ -9,6 +9,39 @@ const router = Router();
 
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          createBlog:
+ *              type: object
+ *              required:
+ *                  -   title
+ *                  -   shortText
+ *                  -   text
+ *                  -   tags
+ *                  -   image
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: title for create blog
+ *                  shortText:
+ *                      type: string
+ *                      description: shortText for create blog
+ *                  text:
+ *                      type: string
+ *                      description: text for create blog
+ *                  tags:
+ *                      type: string
+ *                      description: tags for create blog
+ *                  image:
+ *                      type: file
+ *                      description: image for create blog
+ *                  category:
+ *                      type: integer
+ *                      description: category id for create blog
+ */
+
+/**
+ * @swagger
  *  tags:
  *      -   name : Blog(AdminPanel)
  *          description: made blog managment admin panel
@@ -32,34 +65,12 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  *      post:
  *          tags: [Blog(AdminPanel)]
  *          summary: create blog
- *          consumer:
- *              - multipart/form-data
- *              - application/x-www-form-data-urlencoded
- *          parameters:
- *              -   in: formData
- *                  name: title
- *                  type: string
+ *          requestBody:
  *                  required: true
- *              -   in: formData
- *                  name: shortText
- *                  type: string
- *                  reuired: true
- *              -   in: formData
- *                  name: text
- *                  type: string
- *                  required: true
- *              -   in: formData
- *                  name: tags
- *                  type: string
- *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
- *              -   in: formData
- *                  name: image
- *                  type: file
- *                  required: true
- *              -   in: formData
- *                  name: category
- *                  type: string
- *                  required: true 
+ *                  content:
+ *                      multipart/formData:
+ *                         schema:
+ *                             $ref: '#/components/schemas/createBlog'
  *          responses:
  *              201:
  *                  description: Success - blog created 

@@ -15,7 +15,7 @@ router.use("/user",userAuthRoute);
 
 router.use("/admin/category" , authenticated , checkRole("ADMIN") , categoryRoute);
 
-router.use("/admin/blogs" ,authenticated , checkRole("ADMIN") , blogRoutes)
+router.use("/admin/blogs" , authenticated , checkRole("ADMIN") , blogRoutes)
 
 
 

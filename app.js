@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 
+
 const path = require("path");
 const connectDB = require("./configs/database");
 const {setHeaders} = require("./middlewares/handleHeaders");
@@ -48,11 +49,11 @@ app.use(express.static(path.join(__dirname , "public")));
 //Swagger Ui
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
     definition : {
-        openapi:"3.0.0",
+        openapi: "3.0.0",
         info : {
             title : "Amir Store",
             version : "2.0.0",
-            description : "بزرگترین مرجع آموزش برنامه نویسی و فروش محصولات جذاب برای برنامه نویسان",
+            description : "سایتی برای خرید دوره های برنامه نویسی و وبلاگ",
             contact: {
                 name: "Amir-Alemohammad",
                 email: "amirho3inalemohammad@gmail.com",
@@ -60,16 +61,25 @@ app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
         },
         servers:[
             {
-                url : "http://127.0.0.1:3000/api-docs"
+                url : "http://127.0.0.1:3000"
             },
         ],
-        
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                }
+            }
+        },
+        security: [{
+            bearerAuth: []
+        }]
     },
+
     apis: ["./routers/*/*.js"],
-
-}),{explorer: true}
-
-));
+}),{explorer:true}));
 
 
 

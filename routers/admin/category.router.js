@@ -4,6 +4,37 @@ const categoryController = require('../../controllers/admin/category.controller'
 
 
 const router = Router();
+
+
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          addCategory:
+ *              type: object
+ *              required:
+ *                  -   title
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: title for create category
+ *                  parent:
+ *                      type: integer
+ *                      description: parent of category
+ *          editCategory:
+ *              type: object
+ *              required:
+ *                  -   title
+ *                          
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: title for edit category 
+ * 
+ */
+
+
+
 /**
  * @swagger
  *  tags:
@@ -12,6 +43,9 @@ const router = Router();
  *      -   name : Category(Admin Panel)
  *          description: all methods and routes about category section
  */
+
+
+
 /**
  * @swagger
  *  /admin/category/add:
@@ -19,15 +53,15 @@ const router = Router();
  *          summary: create new category title
  *          tags: [Category(Admin Panel)]
  *          description: add category
- *          parameters:
- *              -   in: formData
- *                  type: string
+ *          requestBody:
  *                  required: true
- *                  name: title
- *              -   in: formData
- *                  type: string
- *                  required: false
- *                  name: parent
+ *                  content: 
+ *                      application/x-www-form-urlencoded:
+ *                         schema:
+ *                             $ref: '#/components/schemas/addCategory'
+ *                      application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/addCategory'
  *          responses: 
  *              201:
  *                 description: Success
@@ -143,10 +177,15 @@ router.delete("/remove/:id",categoryController.removeCategory)
  *                  name: id
  *                  type: string
  *                  required: true
- *              -   in: formData
- *                  name: title
+ *          requestBody:
  *                  required: true
- *                  type: string
+ *                  content: 
+ *                      application/x-www-form-urlencoded:
+ *                         schema:
+ *                             $ref: '#/components/schemas/editCategory'
+ *                      application/json:
+ *                         schema:
+ *                             $ref: '#/components/schemas/editCategory'
  *          responses: 
  *              200:
  *                 description: Success

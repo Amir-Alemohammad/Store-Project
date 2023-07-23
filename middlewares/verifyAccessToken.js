@@ -1,31 +1,36 @@
 const createHttpError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
+const { verifyJwtToken } = require("../utils/functions");
 
 
 
 const authenticated = async(req,res,next)=>{
 try {
+    console.log(req.headers)
     const authorization = req?.headers?.authorization;
+    console.log(authorization)
     if(!authorization){
         throw createHttpError.Unauthorized("لطفا وارد حساب کاربری خود شوید")
     }
 
-    const token = authorization.split(" ")[1]; // Bearer Token ==> ["Bearer","Token"]
+    let token = authorization.split(" ")?.[1]; // Bearer Token ==> ["Bearer","Token"]
 
     
     if(!token){
         throw createHttpError.Unauthorized("لطفا وارد حساب کاربری خود شوید")
     }
     
-    const decodedToken = await jwt.verify(token,process.env.JWT_SECRET);
+    const decodedToken = verifyJwtToken(token);
     
+    console.log(decodedToken)
+
     if(!decodedToken){
         throw createHttpError.Unauthorized("لطفا وارد حساب کاربری خود شوید")
     }
     
     req.userId = decodedToken.user;
-    next();
+    return next();
 } catch (err) {
     next(err);
 }

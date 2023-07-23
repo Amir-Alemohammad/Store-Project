@@ -4,7 +4,8 @@ const createError = require("http-errors");
 
 const userModel = require("../models/user");
 const path = require("path")
-const fs = require("fs")
+const fs = require("fs");
+const createHttpError = require("http-errors");
 
 
 const RandomNumberGenerator = () =>{
@@ -39,8 +40,19 @@ function deleteFileInPublic(fileAddress){
     const filePath = path.join(__dirname , ".." , "public" , fileAddress);
     fs.unlinkSync(filePath)
 }
+function verifyJwtToken(token) {
+    const result = jwt.verify(token,process.env.JWT_SECRET,function(err,decoded){
+        if(err && err.message === "jwt expired"){
+            throw createHttpError.Unauthorized("expireلطفا وارد حساب کاربری خود شوید")
+        }else{
+            return decoded;
+        }
+    });    
+    return result;
+}
 module.exports = {
     RandomNumberGenerator,
     verifyRefreshToken,
     deleteFileInPublic,
+    verifyJwtToken,
 }
