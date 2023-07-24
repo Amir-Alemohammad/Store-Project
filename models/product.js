@@ -1,40 +1,25 @@
 const mongoose = require("mongoose");
+const { commentSchema } = require("./public.schemas");
+
 
 const productSchema = new mongoose.Schema({
     
-    title: {type : String,required : true},
-    
-    shortDesc : {type : String,required: true},
-    
-    description: { type : String,required : true},
-    
-    price : {type : Number,default : 0,},
-    
-    discount : {type : Number,default : 0,},
-    
+    title: {type : String, required : true},
+    shortText : {type : String, required: true},
+    text: { type : String, required : true},
+    price : {type : Number, default : 0,},
+    discount : {type : Number, default : 0,},
     count : {type : Number},
-    
-    images : {type : [String],required : true},
-    
-    tags : {type : [String],default : []},
-
-    like : {type : [String],default : []},
-    
-    deslike : {type : [String],default : []},
-    
-    comments : {type : [],default : []},
-    
-    category : {type : mongoose.Types.ObjectId,required : true},
-    
-    bookmark : {type : [String],default : []},
-
-    type : {type : String,required : true},
-    
-    time : {type : String,required : true},
-
+    images : {type : [String], required : true},
+    tags : {type : [String], default : []},
+    likes : {type : [String], default : []},
+    deslikes : {type : [String], default : []},
+    comments : {type : [commentSchema], default : []},
+    category : {type : mongoose.Types.ObjectId , required : true , ref: "category"},
+    bookmarks : {type : [String], default : []},
+    type : {type : String, enum: ["virtual" , "physical"] , required : true}, //virtual - physical    
     format : {type : String},
-
-    teacher : {type : mongoose.Types.ObjectId,required : true},
+    supplier : {type : mongoose.Types.ObjectId , required : true},
 
     feture : {
         type : Object,

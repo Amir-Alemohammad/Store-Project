@@ -1,24 +1,8 @@
 const mongoose = require("mongoose");
 const { blogSchemaValidation } = require("../validators/admin/blog.validation");
+const { commentSchema } = require("./public.schemas");
 
-const commentSchema = new mongoose.Schema({
-    user : {
-        type: mongoose.Types.ObjectId,
-        ref: "user",
-        required: true,
-    },
-    comment : {
-        type: String,
-        required : true,
-    },
-    createdAt : {
-        type: Date,
-        deafult : new Date().getTime(),
-    },
-    parent:{
-        type: mongoose.Types.ObjectId,
-    }
-});
+
 
 const blogSchema = new mongoose.Schema({
     author: {

@@ -57,6 +57,11 @@ const userSchema = new mongoose.Schema({
     Roles: {
         type : [String],
         default : ["USER"],
+    },
+    courses:{
+        type: [mongoose.Types.ObjectId],
+        ref: "course",
+        default: [],
     }
 },{timestamps: true});
 
