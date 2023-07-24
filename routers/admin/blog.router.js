@@ -36,8 +36,29 @@ const router = Router();
  *                      type: file
  *                      description: image for create blog
  *                  category:
- *                      type: integer
+ *                      type: string
  *                      description: category id for create blog
+ *          editBlog:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: title for edit blog
+ *                  shortText:
+ *                      type: string
+ *                      description: shortText for edit blog
+ *                  text:
+ *                      type: string
+ *                      description: text for edit blog
+ *                  tags:
+ *                      type: string
+ *                      description: tags for edit blog
+ *                  image:
+ *                      type: file
+ *                      description: image for edit blog
+ *                  category:
+ *                      type: string
+ *                      description: category id for edit blog
  */
 
 /**
@@ -125,25 +146,12 @@ router.delete("/remove/:id",AdminBlogController.deleteBlogById);
  *                  name: id
  *                  type: string
  *                  required: true
- *              -   in: formData
- *                  name: title
- *                  type: string
- *              -   in: formData
- *                  name: shortText
- *                  type: string
- *              -   in: formData
- *                  name: text
- *                  type: string
- *              -   in: formData
- *                  name: tags
- *                  type: string
- *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
- *              -   in: formData
- *                  name: image
- *                  type: file                 
- *              -   in: formData
- *                  name: category
- *                  type: string
+ *          requestBody:
+ *                  required: true
+ *                  content:
+ *                      multipart/form-data:
+ *                         schema:
+ *                             $ref: '#/components/schemas/editBlog'
  *          responses:
  *              200:
  *                  description: Success 
