@@ -48,33 +48,33 @@ app.use(express.static(path.join(__dirname , "public")));
 
 //Swagger Ui
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
-    definition : {
-        openapi: "3.0.0",
-        info : {
-            title : "Amir Store",
-            version : "2.0.0",
-            description : "سایتی برای خرید دوره های برنامه نویسی و وبلاگ",
-            contact: {
+    swaggerDefinition:{
+        openapi : "3.0.0",
+        info: {
+            title: "Amir Store",
+            version: "2.0.0",
+            description: "سایتی برای خرید دوره های برنامه نویسی",
+            contact:{
                 name: "Amir-Alemohammad",
                 email: "amirho3inalemohammad@gmail.com",
             }
         },
         servers:[
             {
-                url : "http://127.0.0.1:3000"
+                url: "http://localhost:3000"
             },
         ],
         components: {
             securitySchemes: {
                 bearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT',
-                }
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
             }
         },
         security: [{
-            bearerAuth: []
+            bearerAuth : []
         }]
     },
 

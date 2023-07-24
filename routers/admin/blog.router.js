@@ -68,7 +68,7 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  *          requestBody:
  *                  required: true
  *                  content:
- *                      multipart/formData:
+ *                      multipart/form-data:
  *                         schema:
  *                             $ref: '#/components/schemas/createBlog'
  *          responses:

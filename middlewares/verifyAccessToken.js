@@ -7,9 +7,7 @@ const { verifyJwtToken } = require("../utils/functions");
 
 const authenticated = async(req,res,next)=>{
 try {
-    console.log(req.headers)
     const authorization = req?.headers?.authorization;
-    console.log(authorization)
     if(!authorization){
         throw createHttpError.Unauthorized("لطفا وارد حساب کاربری خود شوید")
     }
@@ -23,7 +21,6 @@ try {
     
     const decodedToken = verifyJwtToken(token);
     
-    console.log(decodedToken)
 
     if(!decodedToken){
         throw createHttpError.Unauthorized("لطفا وارد حساب کاربری خود شوید")
