@@ -1,3 +1,4 @@
+const createHttpError = require("http-errors");
 const productModel = require("../../models/product");
 const { deleteFileInPublic } = require("../../utils/functions");
 
@@ -78,7 +79,14 @@ const removeProduct = async (req,res,next) => {
 }
 const getAllProducts = async (req,res,next) => {
     try {
-        
+        const products = await productModel.find({});
+        if(!products) throw createHttpError.NotFound("محصولی یافت نشد");
+        return res.status(200).json({
+            data:{
+                statusCode: 200,
+                products,
+            }
+        });
     } catch (error) {
         next(error)
     }

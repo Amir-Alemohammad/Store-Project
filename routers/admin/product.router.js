@@ -92,6 +92,22 @@ const router = Router();
 router.post("/add", uploadFile , stringToArray("tags") , productController.addProduct);
 
 
+/**
+ * @swagger
+ *  /admin/products/list:
+ *      get:
+ *          summary: get products
+ *          tags: [Product(Admin Panel)]
+ *          responses: 
+ *              201:
+ *                 description: Success
+ *              500:
+ *                  description: Internal Server Error
+ *              404:
+ *                  description: Not Found
+ */
+router.get("/list",productController.getAllProducts);
+
 router.put("/edit/:id", productController.editProduct);
 
 
