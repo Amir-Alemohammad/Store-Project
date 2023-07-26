@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { commentSchema } = require("./public.schemas");
+const { productValidationSchema } = require("../validators/admin/product.validation");
 
 
 const productSchema = new mongoose.Schema({
@@ -35,6 +36,11 @@ const productSchema = new mongoose.Schema({
     },
 
 });
+
+
+productSchema.statics.productValidation = function(body){
+    return productValidationSchema.validate(body);
+}
 
 const productModel = mongoose.model("productModel",productSchema);
 

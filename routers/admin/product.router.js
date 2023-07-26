@@ -23,6 +23,7 @@ const router = Router();
  *                  -   price
  *                  -   discount
  *                  -   count
+ *                  -   image
  *              properties:
  *                  title:
  *                      type: string
@@ -51,6 +52,18 @@ const router = Router();
  *                  image:
  *                      type: file
  *                      desctiption: the image of product
+ *                  height:
+ *                      type: integer
+ *                      desctiption: the height of product packet
+ *                  width:
+ *                      type: integer
+ *                      desctiption: the width of product packet
+ *                  weight:
+ *                      type: integer
+ *                      desctiption: the weight of product packet
+ *                  length:
+ *                      type: integer
+ *                      desctiption: the lenght of product packet
  */
 /**
  * @swagger

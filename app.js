@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname , "public")));
 //Swagger Ui
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerJsDoc({
     swaggerDefinition:{
-        openapi : "3.0.0",
+        openapi : "3.0.1",
         info: {
             title: "Amir Store",
             version: "2.0.0",
