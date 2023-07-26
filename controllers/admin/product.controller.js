@@ -2,14 +2,21 @@ const createHttpError = require("http-errors");
 const productModel = require("../../models/product");
 const { deleteFileInPublic, listOfImagesFormRequest } = require("../../utils/functions");
 const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
+const categoryModel = require("../../models/categories");
 
 const addProduct = async (req,res,next) => {
     try {
-        let {title,shortText,text,tags,category,fileUploadPath,filename , price , discount , count , height , width , weight , length} = req.body;
+        
+
+        let {title,shortText,text,tags,category,fileUploadPath , price , discount , count , height , width , weight , length , colors} = req.body;
 
         const images = listOfImagesFormRequest(req?.files || [],fileUploadPath)
+
+        images.map((image)=>{
+            req.body.image = image;
+        });
         
-        const supplier = req.userId
+        const supplier = req.userId;
 
         await productModel.productValidation(req.body);
 
@@ -19,8 +26,11 @@ const addProduct = async (req,res,next) => {
         weight = Number(weight);
 
     
+
         let feture = {} , type = "physical"
 
+        feture.colors = colors;
+        
         if(width || length || height || weight){
             if(!width || typeof width === "string") feture.width = 0;
             else feture.width = width;
@@ -37,6 +47,9 @@ const addProduct = async (req,res,next) => {
             type = "virtual"
         }
         
+        const categories = await categoryModel.findById(category);
+
+        if(!categories) throw createHttpError.NotFound("دسته بندی مورد نظر یافت نشد")
 
         const product = await productModel.create({
             title,
@@ -52,6 +65,8 @@ const addProduct = async (req,res,next) => {
             feture,
             supplier,
         });
+
+        
         return res.status(201).json({
             data:{
                 statusCode: 201,

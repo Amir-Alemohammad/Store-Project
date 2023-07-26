@@ -6,7 +6,24 @@ const { stringToArray } = require("../../middlewares/stringToArray");
 
 const router = Router();
 
-
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          Color:
+ *              type: array
+ *              items: 
+ *                  type: string
+ *                  enum:
+ *                      -   black
+ *                      -   white
+ *                      -   gray                
+ *                      -   red
+ *                      -   blue
+ *                      -   green
+ *                      -   orange
+ *                      -   purple
+ */
 
 /**
  * @swagger
@@ -66,6 +83,8 @@ const router = Router();
  *                  length:
  *                      type: integer
  *                      desctiption: the lenght of product packet
+ *                  colors:
+ *                      $ref: '#/components/schemas/Color'
  */
 /**
  * @swagger
