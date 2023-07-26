@@ -1,13 +1,12 @@
 const createHttpError = require("http-errors");
 const productModel = require("../../models/product");
-const { deleteFileInPublic } = require("../../utils/functions");
+const { deleteFileInPublic, listOfImagesFormRequest } = require("../../utils/functions");
 
 const addProduct = async (req,res,next) => {
     try {
-        
         let {title,shortText,text,tags,category,fileUploadPath,filename , price , discount , count , height , width , weight , length} = req.body;
-        
-        const image = req.body.image = fileUploadPath + "/" + filename;
+
+        const images = listOfImagesFormRequest(req?.files || [],fileUploadPath)
         
         const supplier = req.userId
 
@@ -44,7 +43,7 @@ const addProduct = async (req,res,next) => {
             text,
             tags,
             category,
-            images : image,
+            images,
             price,
             discount,
             type,

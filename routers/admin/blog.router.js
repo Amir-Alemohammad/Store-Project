@@ -97,7 +97,7 @@ router.get("/all",AdminBlogController.getListOfBlogs);
  *                  description: Success - blog created 
  * 
  * */
-router.post("/add",authenticated,uploadFile, stringToArray("tags") , AdminBlogController.createBlog);
+router.post("/add",authenticated,uploadFile.single("image"), stringToArray("tags") , AdminBlogController.createBlog);
 
 /**
  * @swagger
@@ -157,7 +157,7 @@ router.delete("/remove/:id",AdminBlogController.deleteBlogById);
  *                  description: Success 
  * 
  * */
-router.put("/edit/:id" , uploadFile ,stringToArray("tags"), AdminBlogController.updateBlogById);
+router.put("/edit/:id" , uploadFile.single("image") ,stringToArray("tags"), AdminBlogController.updateBlogById);
 
 
 

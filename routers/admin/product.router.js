@@ -23,7 +23,7 @@ const router = Router();
  *                  -   price
  *                  -   discount
  *                  -   count
- *                  -   image
+ *                  -   images
  *              properties:
  *                  title:
  *                      type: string
@@ -49,9 +49,11 @@ const router = Router();
  *                  count:
  *                      type: string
  *                      desctiption: the count of product
- *                  image:
- *                      type: file
- *                      desctiption: the image of product
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
  *                  height:
  *                      type: integer
  *                      desctiption: the height of product packet
@@ -89,7 +91,7 @@ const router = Router();
  *              500:
  *                  description: Internal Server Error
  */
-router.post("/add", uploadFile , stringToArray("tags") , productController.addProduct);
+router.post("/add", uploadFile.array("images", 10) , stringToArray("tags") , productController.addProduct);
 
 
 /**

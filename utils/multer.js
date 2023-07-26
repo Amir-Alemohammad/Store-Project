@@ -53,7 +53,7 @@ const uploadFile = multer({
     limits:{
         fileSize: maxSize,
     }
-}).single("image");
+});
 
 module.exports = {
     uploadFile,
