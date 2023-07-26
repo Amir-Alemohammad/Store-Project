@@ -1,6 +1,7 @@
 const createHttpError = require("http-errors");
 const productModel = require("../../models/product");
 const { deleteFileInPublic, listOfImagesFormRequest } = require("../../utils/functions");
+const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
 
 const addProduct = async (req,res,next) => {
     try {
@@ -92,7 +93,17 @@ const getAllProducts = async (req,res,next) => {
 }
 const getOneProduct = async (req,res,next) => {
     try {
-        
+        await mongoIdValidation.validate(req.params);
+        const {id} = req.params;
+        const product = await productModel.findById(id);
+        if(!product) throw new createHttpError.NotFound("محصولی با این شناسه یافت نشد");
+
+        return res.status(200).json({
+            data:{
+                statusCode: 200,
+                product
+            }
+        })
     } catch (error) {
         next(error)
     }

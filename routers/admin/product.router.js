@@ -101,7 +101,7 @@ router.post("/add", uploadFile.array("images", 10) , stringToArray("tags") , pro
  *          summary: get products
  *          tags: [Product(Admin Panel)]
  *          responses: 
- *              201:
+ *              200:
  *                 description: Success
  *              500:
  *                  description: Internal Server Error
@@ -109,6 +109,29 @@ router.post("/add", uploadFile.array("images", 10) , stringToArray("tags") , pro
  *                  description: Not Found
  */
 router.get("/list",productController.getAllProducts);
+
+
+/**
+ * @swagger
+ *  /admin/products/{id}:
+ *      get:
+ *          summary: get product by id
+ *          tags: [Product(Admin Panel)]
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  name: id
+ *                  required: true
+ *          responses: 
+ *              200:
+ *                 description: Success
+ *              500:
+ *                  description: Internal Server Error
+ *              404:
+ *                  description: Not Found
+ */
+router.get("/:id",productController.getOneProduct);
+
 
 router.put("/edit/:id", productController.editProduct);
 
