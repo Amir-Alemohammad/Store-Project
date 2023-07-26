@@ -14,13 +14,18 @@ const RandomNumberGenerator = () =>{
 const verifyRefreshToken =  (refreshToken)=>{
     const authHeader = refreshToken;
 
-    const token = authHeader.split(" ")[1]; // Bearer Token ==> ["Bearer","Token"]
+
+    const token = authHeader; // Bearer Token ==> ["Bearer","Token"]
     
+
     return new Promise((resolve,reject)=>{
 
         jwt.verify(token,process.env.REFRESH_TOKEN_SECRET, async (err,payload)=>{
 
-            if(err) reject(createError.Unauthorized("لطفا وارد حساب کاربری خود شوید"));
+            if(err) {
+                console.log(err)
+                reject(createError.Unauthorized("لطفا وارد حساب کاربری خود شوید"))
+            };
             
             const {phoneNumber} = payload || {};
             
