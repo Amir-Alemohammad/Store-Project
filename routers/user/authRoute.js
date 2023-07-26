@@ -173,7 +173,7 @@ router.post("/checkOtp",authController.checkOtp);
  *                                  $ref: '#/components/schemas/refreshToken'
  *                          application/json:
  *                              schema:
- *                                  $ref: '#/components/schemas/refreshTone' 
+ *                                  $ref: '#/components/schemas/refreshToken' 
  *                  responses:
  *                          200:
  *                              description: Success                     
