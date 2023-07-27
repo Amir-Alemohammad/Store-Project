@@ -154,7 +154,25 @@ router.get("/:id",productController.getOneProduct);
 
 router.put("/edit/:id", productController.editProduct);
 
-
+/**
+ * @swagger
+ *  /admin/products/remove/{id}:
+ *      delete:
+ *          summary: delete product by id
+ *          tags: [Product(Admin Panel)]
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  name: id
+ *                  required: true
+ *          responses: 
+ *              200:
+ *                 description: Success
+ *              500:
+ *                  description: Internal Server Error
+ *              404:
+ *                  description: Not Found
+ */
 router.delete("/remove/:id", productController.removeProduct);
 
 

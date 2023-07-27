@@ -6,6 +6,7 @@ const categoryModel = require("../../models/categories");
 const Controller = require("../controller");
 
 class productController extends Controller{
+
     async addProduct(req,res,next){
         try {
             
@@ -91,7 +92,23 @@ class productController extends Controller{
     
     async removeProduct(req,res,next){
         try {
-            
+            await mongoIdValidation.validate(req.params);
+            const {id} = req.params;
+            const product = await productModel.findById(id);
+            if(!product) throw new createHttpError.NotFound("محصولی با این شناسه یافت نشد");
+
+            const removeProduct = await productModel.deleteOne({_id : product._id});
+
+            if(removeProduct.deletedCount === 0) throw createHttpError.InternalServerError('مشکلی از سمت سرور رخ داده است')
+
+
+            return res.status(200).json({
+                data:{
+                    statusCode: 200,
+                    message: "محصول مورد نظر با موفقیت حذف شد"
+                }
+            })
+
         } catch (error) {
             next(error)
         }
@@ -129,6 +146,7 @@ class productController extends Controller{
             next(error)
         }
     }
+    
 }
 
 
