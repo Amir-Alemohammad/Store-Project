@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
+const { StatusCodes: HttpStatus } = require("http-status-codes")
 const homePage = (req,res,next) => {    
-    return res.status(200).json({
+    return res.status(HttpStatus.OK).json({
         success : true,
-        status : 200,
+        status : HttpStatus.OK,
         message : "Index Page Store",
     });
 }

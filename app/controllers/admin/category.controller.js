@@ -1,4 +1,5 @@
-const createError = require("http-errors")
+const createError = require("http-errors");
+const {StatusCodes : HttpStatus} = require("http-status-codes");
 
 const categoryModel = require("../../models/categories");
 const { categorySchema } = require("../../validators/admin/category.validation");
@@ -18,9 +19,9 @@ class categoryController extends Controller{
                 error.statusCode = 500;
                 throw error;
             }
-            return res.status(201).json({
+            return res.status(HttpStatus.CREATED).json({
                 data:{
-                    statusCode:201,
+                    statusCode:HttpStatus.CREATED,
                     message: "دسته بندی با موفقیت افزوده شد"
                 },
                 category:{
@@ -49,9 +50,9 @@ class categoryController extends Controller{
     
             if(deleteResult.deletedCount == 0) throw createError.InternalServerError("خطای سرور رخ داده است");
     
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode : 200,
+                    statusCode : HttpStatus.OK,
                     message: "حذف دسته بندی با موفقیت انجام شد",
                 }
             });
@@ -73,9 +74,9 @@ class categoryController extends Controller{
                 }
             })
             if(updateResult.modifiedCount == 0) throw createError.InternalServerError("خطایی از سمت سرور رخ داده است");
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     message: "ویرایش دسته بندی با موفقیت انجام شد"
                 }
             })
@@ -111,9 +112,9 @@ class categoryController extends Controller{
             //     },
             // ]);
             const categories = await categoryModel.find({parent : undefined},{__v : 0});
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode : 200,
+                    statusCode : HttpStatus.OK,
                     categories
                 }
             })
@@ -148,7 +149,7 @@ class categoryController extends Controller{
     
             if(category.length == 0) throw createError.NotFound("دسته بندی پیدا نشد");
             
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
                     category
                 }
@@ -164,9 +165,9 @@ class categoryController extends Controller{
                 { parent: undefined },
                 { __v: 0 }
             );
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data: {
-                  statusCode: 200,
+                  statusCode: HttpStatus.OK,
                   parents,
                 },
             });
@@ -183,9 +184,9 @@ class categoryController extends Controller{
                 {parent : id},
                 {__v : 0}    
             );
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode : 200,
+                    statusCode : HttpStatus.OK,
                     children
                 }
             })
@@ -198,9 +199,9 @@ class categoryController extends Controller{
             const categories = await categoryModel.aggregate([
                 {$match: {}}
             ]);
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     categories
                 }
             })

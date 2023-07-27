@@ -1,4 +1,5 @@
 const createHttpError = require("http-errors");
+const {StatusCodes : HttpStatus} = require("http-status-codes");
 
 const blogModel = require("../../models/blog");
 const categoryModel = require("../../models/categories");
@@ -35,8 +36,8 @@ class BlogController extends Controller{
                 category,
     
             });
-            return res.status(201).json({
-                statusCode: 201,
+            return res.status(HttpStatus.CREATED).json({
+                statusCode: HttpStatus.CREATED,
                 data:{
                     message: "پست شما با موفقیت ساخته شد",
                 }
@@ -97,9 +98,9 @@ class BlogController extends Controller{
     
             if(blog.length <= 0) throw createHttpError.NotFound("پستی با این مشخصات پیدا نشد");
             
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode : 200,
+                    statusCode : HttpStatus.OK,
                     blog,
                 }
             })
@@ -154,8 +155,8 @@ class BlogController extends Controller{
                 }
     
             ])
-            return res.status(200).json({
-                statusCode: 200,
+            return res.status(HttpStatus.OK).json({
+                statusCode: HttpStatus.OK,
                 data:{
                     blogs
                 }
@@ -189,9 +190,9 @@ class BlogController extends Controller{
             }
             
     
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     message: "پست مورد نظر با موفقیت حذف شد",
                 }
             })
@@ -226,9 +227,9 @@ class BlogController extends Controller{
             
             if(updateResult.modifiedCount == 0) throw createHttpError.InternalServerError("ویرایش پست به دلیل خطای سرور انجام نشد")
     
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     message: "پست مورد نظر با موفقیت ویرایش شد"
                 }
             })

@@ -2,11 +2,13 @@ const userModel = require("../../../models/user");
 const { RandomNumberGenerator, verifyRefreshToken } = require("../../../utils/functions.js");
 const { getOtpSchema, checkOtpSchema } = require('../../../validators/user/authValidation.js');
 const { ROLES } = require("../../../utils/constans.js");
+const Controller = require("../../controller");
+
 
 const kavenegar = require("kavenegar");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
-const Controller = require("../../controller");
+const {StatusCodes : HttpStatus} = require("http-status-codes");
 
 class authController extends Controller{
 
@@ -35,9 +37,9 @@ class authController extends Controller{
                     phoneNumber,
                     Roles: ROLES.USER,
                 });
-                res.status(201).json({
+                res.status(HttpStatus.CREATED).json({
                     success: true,
-                    statusCode: 201,
+                    statusCode: HttpStatus.CREATED,
                     message: "ثبت نام با موفقیت انجام شد",
                 });
             }
@@ -76,9 +78,9 @@ class authController extends Controller{
                 //     console.log(response);
                 //     console.log(status);
                 // });
-                res.status(200).json({
+                res.status(HttpStatus.OK).json({
                     success: true,
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     code,
                     message: "کد اعتبار سنجی با موفقیت برای شما ارسال شد",
                 });
@@ -127,9 +129,9 @@ class authController extends Controller{
                 }
             })
     
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 success: true,
-                statusCode: 200,
+                statusCode: HttpStatus.OK,
                 message: "ورود با موفقیت انجام شد",
                 accessToken: token,
                 refreshToken,
@@ -165,7 +167,7 @@ class authController extends Controller{
             });
             
     
-            res.status(200).json({
+            res.status(HttpStatus.OK).json({
                 accessToken,
                 RefreshToken: newRefreshToken,
             });

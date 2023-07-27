@@ -1,9 +1,13 @@
 const createHttpError = require("http-errors");
+const {StatusCodes : HttpStatus} = require("http-status-codes");
+
+
 const productModel = require("../../models/product");
 const { deleteFileInPublic, listOfImagesFormRequest } = require("../../utils/functions");
 const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
 const categoryModel = require("../../models/categories");
 const Controller = require("../controller");
+
 
 class productController extends Controller{
 
@@ -70,9 +74,9 @@ class productController extends Controller{
             });
     
             
-            return res.status(201).json({
+            return res.status(HttpStatus.CREATED).json({
                 data:{
-                    statusCode: 201,
+                    statusCode: HttpStatus.CREATED,
                     message: "محصول شما با موفقیت ساخته شد",
                 }
             });
@@ -102,9 +106,9 @@ class productController extends Controller{
             if(removeProduct.deletedCount === 0) throw createHttpError.InternalServerError('مشکلی از سمت سرور رخ داده است')
 
 
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     message: "محصول مورد نظر با موفقیت حذف شد"
                 }
             })
@@ -118,9 +122,9 @@ class productController extends Controller{
         try {
             const products = await productModel.find({});
             if(!products) throw createHttpError.NotFound("محصولی یافت نشد");
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     products,
                 }
             });
@@ -136,9 +140,9 @@ class productController extends Controller{
             const product = await productModel.findById(id);
             if(!product) throw new createHttpError.NotFound("محصولی با این شناسه یافت نشد");
     
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                     product
                 }
             })
@@ -146,7 +150,7 @@ class productController extends Controller{
             next(error)
         }
     }
-    
+
 }
 
 
