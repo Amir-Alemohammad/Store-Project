@@ -42,7 +42,7 @@ const verifyRefreshToken =  (refreshToken)=>{
     
 }
 function deleteFileInPublic(fileAddress){
-    const filePath = path.join(__dirname , ".." , "public" , fileAddress);
+    const filePath = path.join(__dirname , ".." , ".." , "public" , fileAddress);
     fs.unlinkSync(filePath)
 }
 function verifyJwtToken(token) {

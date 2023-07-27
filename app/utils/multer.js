@@ -10,7 +10,7 @@ function createRoute (req) {
     const year = d.getFullYear() + "";
     const month = d.getMonth() + 1 + "";
     const day = d.getDate() + "";
-    const directory = path.join(__dirname , ".." , "public" , "uploads" , "blogs" , year , month , day);
+    const directory = path.join(__dirname , ".." , ".." , "public" , "uploads" , "blogs" , year , month , day);
     
     req.body.fileUploadPath = path.join("uploads" , "blogs" , year , month , day).replace(/\\/g,"/");
     
