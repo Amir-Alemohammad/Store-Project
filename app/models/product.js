@@ -37,6 +37,7 @@ const productSchema = new mongoose.Schema({
 
 });
 
+productSchema.index({title: "text" , shortText: "text" , text : "text"});
 
 productSchema.statics.productValidation = function(body){
     return productValidationSchema.validate(body);

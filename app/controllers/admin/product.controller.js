@@ -120,8 +120,22 @@ class productController extends Controller{
     
     async getAllProducts(req,res,next){
         try {
-            const products = await productModel.find({});
-            if(!products) throw createHttpError.NotFound("محصولی یافت نشد");
+            
+            const search = req?.query?.search || "";
+
+            let products;
+            if(search){
+                products = await productModel.find({
+                    $text : {
+                        $search: search
+                    },
+                });
+            }else{
+                products = await productModel.find({});
+            }
+
+            if(products.length <= 0) throw createHttpError.NotFound("محصولی یافت نشد");
+            
             return res.status(HttpStatus.OK).json({
                 data:{
                     statusCode: HttpStatus.OK,
