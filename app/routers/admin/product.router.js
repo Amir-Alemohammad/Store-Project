@@ -85,6 +85,52 @@ const router = Router();
  *                      desctiption: the lenght of product packet
  *                  colors:
  *                      $ref: '#/components/schemas/Color'
+ *          edit-product:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      desctiption: the title of product
+ *                  shortText:
+ *                      type: string
+ *                      desctiption: the shortText of product
+ *                  text:
+ *                      type: string
+ *                      desctiption: the text of product
+ *                  tags:
+ *                      type: array
+ *                      desctiption: the tags of product
+ *                  category:
+ *                      type: string
+ *                      desctiption: the category of product
+ *                  price:
+ *                      type: string
+ *                      desctiption: the price of product
+ *                  discount:
+ *                      type: string
+ *                      desctiption: the discount of product
+ *                  count:
+ *                      type: string
+ *                      desctiption: the count of product
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
+ *                  height:
+ *                      type: integer
+ *                      desctiption: the height of product packet
+ *                  width:
+ *                      type: integer
+ *                      desctiption: the width of product packet
+ *                  weight:
+ *                      type: integer
+ *                      desctiption: the weight of product packet
+ *                  length:
+ *                      type: integer
+ *                      desctiption: the lenght of product packet
+ *                  colors:
+ *                      $ref: '#/components/schemas/Color'
  */
 /**
  * @swagger
@@ -156,9 +202,6 @@ router.get("/list",productController.getAllProducts);
  */
 router.get("/:id",productController.getOneProduct);
 
-
-router.put("/edit/:id", productController.editProduct);
-
 /**
  * @swagger
  *  /admin/products/remove/{id}:
@@ -179,6 +222,33 @@ router.put("/edit/:id", productController.editProduct);
  *                  description: Not Found
  */
 router.delete("/remove/:id", productController.removeProduct);
+
+/**
+ * @swagger
+ *  /admin/products/edit/{id}:
+ *      put:
+ *          summary: create and save product
+ *          tags: [Product(Admin Panel)]
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  required: true
+ *                  description: id of product for update it
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          $ref: '#/components/schemas/edit-product'
+ *          responses: 
+ *              200:
+ *                 description: Success
+ *              500:
+ *                  description: Internal Server Error
+ *              404:
+ *                  description: Not Found
+ */
+router.put("/edit/:id", uploadFile.array("images", 10) , stringToArray("tags") , productController.editProduct);
 
 
 module.exports = {
