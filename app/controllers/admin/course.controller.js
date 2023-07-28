@@ -2,7 +2,9 @@ const {StatusCodes : HttpStatus} = require("http-status-codes")
 
 const Controller = require("../controller");
 const courseModel = require("../../models/course");
-const { deleteInvalidPropertyInObject } = require("../../utils/functions");
+const { deleteInvalidPropertyInObject, deleteFileInPublic } = require("../../utils/functions");
+const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
+const createHttpError = require("http-errors");
 
 class courseController extends Controller{
     
@@ -31,10 +33,18 @@ class courseController extends Controller{
     }
     async addCourse(req,res,next){
         try {
+            
+            const category = await mongoIdValidation.validate({id : req.body.category});
+            
+            await courseModel.courseValidation(req.body);
+
             const data = req.body;
 
-            
+            data.teacher = req.userId;
 
+            const course = await courseModel.create({...data});
+
+            if(!course?._id) throw {status: HttpStatus.INTERNAL_SERVER_ERROR , message: "خطایی از سمت سرور رخ داده است"}
             
             return res.status(HttpStatus.CREATED).json({
                 data:{
@@ -43,6 +53,7 @@ class courseController extends Controller{
                 }
             });
         } catch (error) {
+            deleteFileInPublic(req.body.image)
             next(error)
         }
     }

@@ -85,7 +85,7 @@ module.exports = class Application{
     createServer(){
         this.#app.listen(this.#PORT,() => {
             console.log(`Server Running : http://localhost:${process.env.PORT} on ${process.env.NODE_ENV} mode`)
-        })
+        });
     }
 
     async connectToDB(){

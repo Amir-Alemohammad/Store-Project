@@ -19,6 +19,13 @@ const router = Router();
  *                  -   free
  *                  -   cash
  *                  -   vip
+ *          status:
+ *              type: string
+ *              enum:
+ *                  -   Holding
+ *                  -   Completed
+ *                  -   NotStarted
+ *              default: NotStarted
  */
 /**
  * @swagger
@@ -35,6 +42,7 @@ const router = Router();
  *                  -   price
  *                  -   discount
  *                  -   image
+ *                  -   status
  *                  -   type
  *              properties:
  *                  title:
@@ -69,6 +77,9 @@ const router = Router();
  *                      description: the image of course
  *                  type:
  *                      $ref: '#/components/schemas/typesCourse'
+ *                  status:
+ *                      $ref: '#/components/schemas/status'
+ *                      
  * */
 
 /**
