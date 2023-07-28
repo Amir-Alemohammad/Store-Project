@@ -44,28 +44,28 @@ const router = Router();
  *              properties:
  *                  title:
  *                      type: string
- *                      desctiption: the title of product
+ *                      description: the title of product
  *                  shortText:
  *                      type: string
- *                      desctiption: the shortText of product
+ *                      description: the shortText of product
  *                  text:
  *                      type: string
- *                      desctiption: the text of product
+ *                      description: the text of product
  *                  tags:
  *                      type: array
- *                      desctiption: the tags of product
+ *                      description: the tags of product
  *                  category:
  *                      type: string
- *                      desctiption: the category of product
+ *                      description: the category of product
  *                  price:
  *                      type: string
- *                      desctiption: the price of product
+ *                      description: the price of product
  *                  discount:
  *                      type: string
- *                      desctiption: the discount of product
+ *                      description: the discount of product
  *                  count:
  *                      type: string
- *                      desctiption: the count of product
+ *                      description: the count of product
  *                  images:
  *                      type: array
  *                      items:
@@ -78,16 +78,16 @@ const router = Router();
  *                      required: true
  *                  height:
  *                      type: integer
- *                      desctiption: the height of product packet
+ *                      description: the height of product packet
  *                  width:
  *                      type: integer
- *                      desctiption: the width of product packet
+ *                      description: the width of product packet
  *                  weight:
  *                      type: integer
- *                      desctiption: the weight of product packet
+ *                      description: the weight of product packet
  *                  length:
  *                      type: integer
- *                      desctiption: the lenght of product packet
+ *                      description: the lenght of product packet
  *                  colors:
  *                      $ref: '#/components/schemas/Color'
  *          edit-product:
@@ -95,28 +95,28 @@ const router = Router();
  *              properties:
  *                  title:
  *                      type: string
- *                      desctiption: the title of product
+ *                      description: the title of product
  *                  shortText:
  *                      type: string
- *                      desctiption: the shortText of product
+ *                      description: the shortText of product
  *                  text:
  *                      type: string
- *                      desctiption: the text of product
+ *                      description: the text of product
  *                  tags:
  *                      type: array
- *                      desctiption: the tags of product
+ *                      description: the tags of product
  *                  category:
  *                      type: string
- *                      desctiption: the category of product
+ *                      description: the category of product
  *                  price:
  *                      type: string
- *                      desctiption: the price of product
+ *                      description: the price of product
  *                  discount:
  *                      type: string
- *                      desctiption: the discount of product
+ *                      description: the discount of product
  *                  count:
  *                      type: string
- *                      desctiption: the count of product
+ *                      description: the count of product
  *                  images:
  *                      type: array
  *                      items:
@@ -124,16 +124,16 @@ const router = Router();
  *                          format: binary
  *                  height:
  *                      type: integer
- *                      desctiption: the height of product packet
+ *                      description: the height of product packet
  *                  width:
  *                      type: integer
- *                      desctiption: the width of product packet
+ *                      description: the width of product packet
  *                  weight:
  *                      type: integer
- *                      desctiption: the weight of product packet
+ *                      description: the weight of product packet
  *                  length:
  *                      type: integer
- *                      desctiption: the lenght of product packet
+ *                      description: the lenght of product packet
  *                  colors:
  *                      $ref: '#/components/schemas/Color'
  */

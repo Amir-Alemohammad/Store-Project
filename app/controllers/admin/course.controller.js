@@ -28,6 +28,13 @@ class courseController extends Controller{
             next(error)
         }
     }
+    async addCourse(req,res,next){
+        try {
+            
+        } catch (error) {
+            next(error)
+        }
+    }
     
 
 }

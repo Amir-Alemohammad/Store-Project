@@ -1,7 +1,81 @@
 const {Router} = require("express");
+
+
 const { CourseController } = require("../../controllers/admin/course.controller");
+const { uploadFile } = require("../../utils/multer");
+const { stringToArray } = require("../../middlewares/stringToArray");
+
 
 const router = Router();
+
+
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          typesCourse:
+ *              type: array
+ *              items: 
+ *                  type: string
+ *                  enum:
+ *                      -   free
+ *                      -   cash
+ *                      -   vip
+ */
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          course:
+ *              type: object
+ *              required:
+ *                  -   title
+ *                  -   shortText
+ *                  -   text
+ *                  -   tags
+ *                  -   category
+ *                  -   price
+ *                  -   discount
+ *                  -   image
+ *                  -   type
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: the title of course
+ *                      example: عنوان دوره
+ *                  shortText:
+ *                      type: string
+ *                      description: the shortText of course
+ *                      example: متن کوتاه شده تستی
+ *                  text:
+ *                      type: string
+ *                      description: the text of course
+ *                      example: متن تستی برای دوره های برنامه نویسی
+ *                  tags:
+ *                      type: array
+ *                      description: the tags of course
+ *                  category:
+ *                      type: string
+ *                      description: the category of course
+ *                      example: 64b7d6a8e1ec48de168e3ca4
+ *                  price:
+ *                      type: string
+ *                      description: the price of course
+ *                      example: 250000
+ *                  discount:
+ *                      type: string
+ *                      description: the discount of course
+ *                      example: 50000
+ *                  count:
+ *                      type: string
+ *                      description: the count of course
+ *                      example: 120
+ *                  image:
+ *                      type: file
+ *                      description: the image of course
+ *                  type:
+ *                      $ref: '#/components/schemas/typesCourse'
+ * */
 
 /**
  * @swagger
@@ -27,8 +101,27 @@ const router = Router();
  *                  description: Not Found 
  * 
  * */
-router.get("/list",CourseController.getListOfCourses) 
+router.get("/list",CourseController.getListOfCourses); 
 
+/**
+ * @swagger
+ *  /admin/courses/add:
+ *      post:
+ *          summary: create and save courses
+ *          tags: [Course(Admin Panel)]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          $ref: '#/components/schemas/course'
+ *          responses: 
+ *              201:
+ *                 description: Success
+ *              500:
+ *                  description: Internal Server Error
+ */
+router.post("/add",uploadFile.single("image") , stringToArray("tags"),CourseController.addCourse);
 
 
 
