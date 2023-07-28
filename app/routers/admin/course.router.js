@@ -14,13 +14,11 @@ const router = Router();
  *  components:
  *      schemas:
  *          typesCourse:
- *              type: array
- *              items: 
- *                  type: string
- *                  enum:
- *                      -   free
- *                      -   cash
- *                      -   vip
+ *              type: string
+ *              enum:
+ *                  -   free
+ *                  -   cash
+ *                  -   vip
  */
 /**
  * @swagger
@@ -66,10 +64,6 @@ const router = Router();
  *                      type: string
  *                      description: the discount of course
  *                      example: 50000
- *                  count:
- *                      type: string
- *                      description: the count of course
- *                      example: 120
  *                  image:
  *                      type: file
  *                      description: the image of course

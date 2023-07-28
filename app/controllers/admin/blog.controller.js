@@ -12,10 +12,8 @@ class BlogController extends Controller{
 
     async createBlog(req,res,next){
         try {
-            const {title,shortText,text,tags,category,fileUploadPath,filename} = req.body;
-            
-            const image = req.body.image = fileUploadPath + "/" + filename;
-            
+            const {title,shortText,text,tags,category,image} = req.body;
+        
             const author = req.userId;
     
             await blogModel.blogValidation(req.body);
@@ -206,10 +204,8 @@ class BlogController extends Controller{
             
             const {id} = req.params;
             
-            const {title , shortText , text , tags , fileUploadPath , filename , category} = req.body;
+            const {title , shortText , text , tags , image ,category} = req.body;
         
-            const image = req.body.image = fileUploadPath + "/" + filename;
-    
             const blog = await blogModel.findById(id);
                 
             if(!blog) throw createHttpError.NotFound("پستی بااین مشخصات پیدا نشد")

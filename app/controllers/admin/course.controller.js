@@ -2,6 +2,7 @@ const {StatusCodes : HttpStatus} = require("http-status-codes")
 
 const Controller = require("../controller");
 const courseModel = require("../../models/course");
+const { deleteInvalidPropertyInObject } = require("../../utils/functions");
 
 class courseController extends Controller{
     
@@ -30,7 +31,17 @@ class courseController extends Controller{
     }
     async addCourse(req,res,next){
         try {
+            const data = req.body;
+
             
+
+            
+            return res.status(HttpStatus.CREATED).json({
+                data:{
+                    statusCode: HttpStatus.CREATED,
+                    message: "دوره با موفقیت ایجاد شد"
+                }
+            });
         } catch (error) {
             next(error)
         }

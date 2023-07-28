@@ -29,7 +29,12 @@ const storage = multer.diskStorage({
     filename: (req , file , cb) => {
         if(file.originalname){
             const fileName = `${shortid.generate()}_${file.originalname}`;
+            
             req.body.filename = fileName;
+
+            
+            req.body.image = path.join(req.body.fileUploadPath , req.body.filename)
+            
             return cb(null , fileName)
         }
         cb(null,null)

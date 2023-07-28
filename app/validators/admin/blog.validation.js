@@ -10,7 +10,7 @@ const blogSchemaValidation = Yup.object().shape({
     shortText: Yup.string().required("متن الزامی میباشد"),
     text: Yup.string().required("توضیحات الزامی میباشد"),
     filename: Yup.string().matches(imageRegex,"فرمت فایل پشتیبانی نمی شود"),
-    tags: Yup.string().min(0).max(20,"برچسب ها نباید بیشتر از 20 آیتم باشد"),
+    tags: Yup.array().required("برچسب ها الزامی می باشد"),
     category: Yup.string().matches(mongoIdValidation,createHttpError.BadRequest("دسته بندی مورد نظر یافت نشد")),
 });
 
