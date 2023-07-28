@@ -33,10 +33,12 @@ const courseSchema = new mongoose.Schema({
     type : {type : String , enum: ["free","cash","vip"] , required : true , default: "free"}, // free - cash - vip    
     time: {type: String , default: "00:00:00"},
     teacher : {type : mongoose.Types.ObjectId , ref: "user" , required : true},
-    chapter: {type : [chapterSchema] , default: []},
+    chapters: {type : [chapterSchema] , default: []},
     students: {type: [mongoose.Types.ObjectId] , ref: "user" , default : []}
 
 });
+
+courseSchema.index({title: "text" , text: "text" , shortText: "text"});
 
 const courseModel = mongoose.model("courseModel",courseSchema);
 
