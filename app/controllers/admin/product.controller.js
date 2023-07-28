@@ -3,10 +3,24 @@ const {StatusCodes : HttpStatus} = require("http-status-codes");
 
 
 const productModel = require("../../models/product");
-const { deleteFileInPublic, listOfImagesFormRequest } = require("../../utils/functions");
+const { deleteFileInPublic, listOfImagesFormRequest , copyObject, setfeaturess, setfeatures, deleteInvalidPropertyInObject } = require("../../utils/functions");
 const { mongoIdValidation } = require("../../validators/admin/mongoId.validation");
 const categoryModel = require("../../models/categories");
 const Controller = require("../controller");
+
+const ProductBlackList = {
+    BOOKMARKS: "bookmarks",
+    LIKES: "likes",
+    DISLIKES: "dislikes",
+    COMMENTS: "comments",
+    SUPPLIER: "supplier",
+    WEIGHT: "weight",
+    WIDTH: "width",
+    LENGTH: "length",
+    HEIGHT: "height",
+    COLORS: "colors"
+}
+  Object.freeze(ProductBlackList)
 
 
 class productController extends Controller{
@@ -15,7 +29,7 @@ class productController extends Controller{
         try {
             
     
-            let {title,shortText,text,tags,category,fileUploadPath , price , discount , count , height , width , weight , length , colors} = req.body;
+            let {title,shortText,text,tags,category,fileUploadPath , price , discount , count , type} = req.body;
     
             const images = listOfImagesFormRequest(req?.files || [],fileUploadPath)
     
@@ -27,32 +41,10 @@ class productController extends Controller{
     
             await productModel.productValidation(req.body);
     
-            width = Number(width);
-            length = Number(length);
-            height = Number(height);
-            weight = Number(weight);
-    
-        
-    
-            let feture = {} , type = "physical"
-    
-            feture.colors = colors;
+
+            let features = setfeatures(req.body);
             
-            if(width || length || height || weight){
-                if(!width || typeof width === "string") feture.width = 0;
-                else feture.width = width;
-                
-                if(!length || typeof length === "string") feture.length = 0;
-                else feture.length = length;
-                
-                if(!height || typeof height === "string") feture.height = 0;
-                else feture.height = height;
-                
-                if(!weight || typeof weight === "string") feture.weight = 0;
-                else feture.weight = weight;
-            }else{
-                type = "virtual"
-            }
+            
             
             const categories = await categoryModel.findById(category);
     
@@ -69,7 +61,7 @@ class productController extends Controller{
                 discount,
                 type,
                 count,
-                feture,
+                features,
                 supplier,
             });
     
@@ -88,9 +80,39 @@ class productController extends Controller{
 
     async editProduct(req,res,next){
         try {
+
+            await mongoIdValidation.validate(req.params)
+
+            const {id} = req.params;
+
+            const product = await productModel.findOne({_id : id});
+
+            const data = copyObject(req.body);            
             
+            data.images = listOfImagesFormRequest(req?.files || [],req.body.fileUploadPath)
+            
+            data.features = setfeatures(req.body);
+            
+
+            let blackListFields = Object.values(ProductBlackList);
+            
+            deleteInvalidPropertyInObject(data,blackListFields);
+            
+            if(!product) throw {status: HttpStatus.NOT_FOUND , message: "محصول مورد نظر پیدا نشد"};
+
+            const updateResult = await productModel.updateOne({_id : product._id},{$set : data});
+
+            if(updateResult.modifiedCount == 0) throw {status: HttpStatus.INTERNAL_SERVER_ERROR , message: "خطایی از سمت سرور رخ داده است"}
+
+            return res.status(HttpStatus.OK).json({
+                data:{
+                    statusCode : HttpStatus.OK,
+                    message : "ویرایش محصول با موفقیت انجام شد"
+                }
+            });
+
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
     
@@ -135,7 +157,7 @@ class productController extends Controller{
             }
 
             if(products.length <= 0) throw createHttpError.NotFound("محصولی یافت نشد");
-            
+
             return res.status(HttpStatus.OK).json({
                 data:{
                     statusCode: HttpStatus.OK,

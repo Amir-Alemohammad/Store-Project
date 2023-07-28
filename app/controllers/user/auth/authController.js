@@ -153,7 +153,7 @@ class authController extends Controller{
             const accessToken = jwt.sign({
                 user: user._id.toString(),
                 phoneNumber,
-            }, process.env.JWT_SECRET, { expiresIn: "1h" });
+            }, process.env.JWT_SECRET, { expiresIn: "24h" });
     
             const newRefreshToken = jwt.sign({
                 user: user._id.toString(),

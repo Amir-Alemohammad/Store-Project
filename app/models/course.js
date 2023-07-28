@@ -26,7 +26,7 @@ const courseSchema = new mongoose.Schema({
     image : {type : String, required : true},
     tags : {type : [String], default : []},
     likes : {type : [String], default : []},
-    deslikes : {type : [String], default : []},
+    dislikes : {type : [String], default : []},
     comments : {type : [commentSchema], default : []},
     category : {type : mongoose.Types.ObjectId , required : true , ref: "category"},
     bookmarks : {type : [String], default : []},

@@ -71,6 +71,11 @@ const router = Router();
  *                      items:
  *                          type: string
  *                          format: binary
+ *                  type:
+ *                      type: string
+ *                      description: the type of product 
+ *                      example: virtual - physical
+ *                      required: true
  *                  height:
  *                      type: integer
  *                      desctiption: the height of product packet
@@ -226,29 +231,27 @@ router.delete("/remove/:id", productController.removeProduct);
 /**
  * @swagger
  *  /admin/products/edit/{id}:
- *      put:
- *          summary: create and save product
+ *      patch:
  *          tags: [Product(Admin Panel)]
+ *          summary: create and save product
  *          parameters:
  *              -   in: path
+ *                  name: id
  *                  type: string
  *                  required: true
- *                  description: id of product for update it
+ *                  description: id of product for update product
  *          requestBody:
  *              required: true
  *              content:
  *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/edit-product'
- *          responses: 
+ *          
+ *          responses:
  *              200:
- *                 description: Success
- *              500:
- *                  description: Internal Server Error
- *              404:
- *                  description: Not Found
+ *                  description: updated Product
  */
-router.put("/edit/:id", uploadFile.array("images", 10) , stringToArray("tags") , productController.editProduct);
+router.patch("/edit/:id", uploadFile.array("images", 10) , stringToArray("tags") , productController.editProduct);
 
 
 module.exports = {

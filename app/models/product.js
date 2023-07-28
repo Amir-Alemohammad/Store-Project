@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
     images : {type : [String], required : true},
     tags : {type : [String], default : []},
     likes : {type : [String], default : []},
-    deslikes : {type : [String], default : []},
+    dislikes : {type : [String], default : []},
     comments : {type : [commentSchema], default : []},
     category : {type : mongoose.Types.ObjectId , required : true , ref: "category"},
     bookmarks : {type : [String], default : []},
@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
     format : {type : String},
     supplier : {type : mongoose.Types.ObjectId , required : true},
 
-    feture : {
+    features : {
         type : Object,
         default : {
             length : "",
