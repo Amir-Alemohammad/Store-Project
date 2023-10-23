@@ -8,15 +8,15 @@ const Controller = require("../../controller");
 const kavenegar = require("kavenegar");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
-const {StatusCodes : HttpStatus} = require("http-status-codes");
+const { StatusCodes: HttpStatus } = require("http-status-codes");
 
-class authController extends Controller{
+class authController extends Controller {
 
-    async register(req, res, next){
+    async register(req, res, next) {
         try {
             await userModel.userValidation(req.body);
             const { phoneNumber, firstname, lastname, email, password } = req.body;
-    
+
             const user = await userModel.findOne({ phoneNumber });
             const emailAvailable = await userModel.findOne({ email });
             if (emailAvailable) {
@@ -48,7 +48,7 @@ class authController extends Controller{
         }
     }
 
-    async getOtp(req, res, next){
+    async getOtp(req, res, next) {
         try {
             await getOtpSchema.validate(req.body);
             const { phoneNumber } = req.body;
@@ -90,7 +90,7 @@ class authController extends Controller{
         }
     }
 
-    async checkOtp(req, res, next){
+    async checkOtp(req, res, next) {
         try {
             await checkOtpSchema.validate(req.body);
             const { phoneNumber, code } = req.body;
@@ -111,24 +111,24 @@ class authController extends Controller{
                 error.statusCode = 400;
                 throw error;
             }
-    
+
             const token = jwt.sign({
                 user: user._id.toString(),
                 phoneNumber,
             }, process.env.JWT_SECRET, { expiresIn: "24h" });
-    
-    
+
+
             const refreshToken = jwt.sign({
                 user: user._id.toString(),
                 phoneNumber,
             }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1y" });
-    
+
             await userModel.updateOne({ phoneNumber }, {
                 $set: {
                     refreshToken,
                 }
             })
-    
+
             res.status(HttpStatus.OK).json({
                 success: true,
                 statusCode: HttpStatus.OK,
@@ -141,32 +141,32 @@ class authController extends Controller{
             next(err);
         }
     }
-    
-    async refreshToken(req, res, next){
+
+    async refreshToken(req, res, next) {
         try {
             const { refreshToken } = req.body;
-    
+
             const phoneNumber = await verifyRefreshToken(refreshToken);
-    
+
             const user = await userModel.findOne({ phoneNumber });
-    
+
             const accessToken = jwt.sign({
                 user: user._id.toString(),
                 phoneNumber,
             }, process.env.JWT_SECRET, { expiresIn: "24h" });
-    
+
             const newRefreshToken = jwt.sign({
                 user: user._id.toString(),
                 phoneNumber,
             }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1y" });
-    
+
             await userModel.updateOne({ phoneNumber }, {
                 $set: {
                     refreshToken: newRefreshToken,
                 }
             });
-            
-    
+
+
             res.status(HttpStatus.OK).json({
                 accessToken,
                 RefreshToken: newRefreshToken,
@@ -178,5 +178,5 @@ class authController extends Controller{
 }
 
 module.exports = {
-    authController : new authController()
+    authController: new authController()
 }

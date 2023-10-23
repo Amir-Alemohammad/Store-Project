@@ -6,18 +6,18 @@ const commentSchema = new mongoose.Schema({
         ref: "user",
         required: true,
     },
-    comment : {
+    text : {
         type: String,
         required : true,
     },
+    blog:{
+        type:[mongoose.Types.ObjectId],
+        ref:"blog" 
+    },
     createdAt : {
         type: Date,
-        deafult : new Date().getTime(),
+        default : new Date().getTime(),
     },
-    parent:{
-        type: mongoose.Types.ObjectId,
-        ref: "comment"
-    }
 });
 
 

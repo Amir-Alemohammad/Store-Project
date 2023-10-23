@@ -1,90 +1,90 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const {authSchema} = require("../validators/user/authValidation");
+const { authSchema } = require("../validators/user/authValidation");
 
 
 const userSchema = new mongoose.Schema({
-    firstname:{
-        type : String,
-        required : true
+    firstname: {
+        type: String,
+        required: true
     },
-    lastname:{
-        type : String,
-        required : true
+    lastname: {
+        type: String,
+        required: true
     },
-    username:{
-        type : String,
-        lowercase : true,
+    username: {
+        type: String,
+        lowercase: true,
     },
-    phoneNumber:{
-        type : String,
-        required : true,
+    phoneNumber: {
+        type: String,
+        required: true,
         unique: true,
     },
-    email:{
-        type : String,
-        required : true,
-        lowercase : true,
+    email: {
+        type: String,
+        required: true,
+        lowercase: true,
         unique: true,
     },
-    refreshToken:{
-          type:String,
-          default: "Bearer Token"     
+    refreshToken: {
+        type: String,
+        default: "Bearer Token"
     },
-    password:{
-        type : String,
-        required : true
+    password: {
+        type: String,
+        required: true
     },
-    otp:{
-        type : Object,
-        default:{
-            code : 0,
-            expiresIn : 0
+    otp: {
+        type: Object,
+        default: {
+            code: 0,
+            expiresIn: 0
         },
     },
-    bills:{
-        type : [],
-        default : [],
+    bills: {
+        type: [],
+        default: [],
     },
-    discount:{
-        type : Number,
-        default : 0,
+    discount: {
+        type: Number,
+        default: 0,
     },
-    birt : {
-        type : String,
+    birt: {
+        type: String,
     },
     Roles: {
-        type : [String],
-        default : ["USER"],
+        type: [String],
+        default: ["USER"],
     },
-    courses:{
+    courses: {
         type: [mongoose.Types.ObjectId],
         ref: "course",
         default: [],
     }
-},{timestamps: true});
+}, { timestamps: true });
 
 
 
 
-userSchema.statics.userValidation = function(body){
-    return authSchema.validate(body,{abortEarly : true});
+userSchema.statics.userValidation = function (body) {
+    return authSchema.validate(body, { abortEarly: true });
 }
 
 //hashing password
-userSchema.pre("save",function(next){
+userSchema.pre("save", function (next) {
     let user = this;
-    if(!user.isModified("password")) return next();
+    if (!user.isModified("password")) return next();
 
-    bcrypt.hash(user.password,10,(err,hash)=>{
-        if(err) return next(err)
+    bcrypt.hash(user.password, 10, (err, hash) => {
+        if (err) return next(err)
         user.password = hash;
         next();
     })
 });
 
 
-const userModel = mongoose.model("userModel",userSchema);
+const userModel = mongoose.model("userModel", userSchema);
 
 module.exports = userModel;
